@@ -69,12 +69,26 @@ complimentary set of rules for subscriber behavior and relay behavior.
 This specification defines a default algorithm - type 0. Other algorithms are referenced in the
 "SSTS Algorithms" registry {{iana-ssts-algorithms}}.
 
-During SETUP, a relay communicates which SSTS algorithms it supports by passing the
-SSTS_ALGORITHMS Setup Option {{ssts-algorithms}}.
+SSTS is implemented as a MOQT Extension(See {{MOQT}} Sect 3.2).
 
 # Conventions and Definitions
 
 {::boilerplate bcp14-tagged}
+
+# Extension negotiation
+
+During MOQT SETUP, an endpoint communicates which SSTS algorithms it supports by passing the
+SSTS_ALGORITHMS Setup Option {{ssts-algorithms}}.
+
+The absence of the SSTS_ALGORITHMS setup option, or an SSTS_ALGORITHMS setup option
+with an empty list, prohibits the use of SSTS.
+
+## SSTS_ALGORITHMS {#ssts-algorithms}
+The SSTS_ALGORITHMS option (Option Type 0x09) communicates the list of SSTS
+algorithms which the relay supports. Supported algorithms are serialized as
+a sequence of varints. Returning an empty sequence is acceptable and indicates
+that SSTS is not supported. Algorithms are registered in the SSTS-Algorithms
+{{iana-ssts-algorithms}} registry.
 
 # General behaviors for all SSTS algorithms {#ssts-general-requirements}
 
@@ -120,16 +134,6 @@ SWITCHING-SET-ASSIGNMENT {
   with a Parameter Error.
 * Algorithm: integer identifying the SSTS algorithm to be used.
 
-
-# SSTS_ALGORITHMS {#ssts-algorithms}
-
-The SSTS_ALGORITHMS option (Option Type 0x09) communicates the list of SSTS
-algorithms which the relay supports. Supported algorithms are serialized as
-a sequence of varints. Returning an empty sequence is acceptable and indicates
-that SSTS is not supported. Algorithms are registered in the SSTS-Algorithms
-{{iana-ssts-algorithms}} registry.
-
-The default value is any empty list which prohibits the use of SSTS.
 
 # Default switching algorithm
 
@@ -255,6 +259,19 @@ lower-priority sets receive less than their target or nothing.
 TBD
 
 # IANA Considerations
+
+## SSTS_ALGORITHMS Setup Option
+
+IANA is requested to add the following entry to the "Setup Options"
+registry (Section 15.4 of {{MOQT}}):
+
+| Type | Name                   | Specification  |
+|------|------------------------|----------------|
+| TBD1 | SSTS_ALGORITHMS  | This document  |
+
+SSTS_ALGORITHMS is a Setup Option (see {{ssts-algorithms}})
+that an endpoint includes in its SETUP message to indicate support for the
+SSTS extension defined in this document.
 
 ## SSTS-Algorithms {#iana-ssts-algorithms}
 
