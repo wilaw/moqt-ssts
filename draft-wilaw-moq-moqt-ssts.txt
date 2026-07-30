@@ -79,15 +79,17 @@ Table of Contents
    4.  General behaviors for all SSTS algorithms
    5.  SWITCHING_SET_ASSIGNMENT Parameter
    6.  Default switching algorithm
-     6.1.  SWITCHING-SET-ASSIGNMENT fields
+     6.1.  SWITCHING_SET_ASSIGNMENT fields
      6.2.  Subscriber behavior
      6.3.  Publisher behavior
        6.3.1.  Bandwidth Allocation
    7.  Security Considerations
    8.  IANA Considerations
      8.1.  SSTS_ALGORITHMS Setup Option
-     8.2.  SSTS-Algorithms
-   9.  Normative References
+     8.2.  SWITCHING_SET_ASSIGNMENT Parameter
+     8.3.  SSTS-Algorithms
+   9.  Acknowledgments
+   10. Normative References
    Authors' Addresses
 
 1.  Introduction
@@ -96,15 +98,15 @@ Table of Contents
    controlled behavior in which a publisher dynamically selects which
    track to forward from a switching set based on various algorithms.
    Each algorithm defines a set of attributes which are passed in the
-   SWITCHING-SET-ASSIGNMENT parameter Section 5 along with a
+   SWITCHING_SET_ASSIGNMENT parameter Section 5 along with a
    complimentary set of rules for subscriber behavior and relay
    behavior.
 
    This specification defines a default algorithm - type 0.  Other
    algorithms are referenced in the "SSTS Algorithms" registry
-   Section 8.2.
+   (Section 8.3).
 
-   SSTS is implemented as a MOQT Extension(See [MOQT] Sect 3.2).
+   SSTS is implemented as a MOQT Extension (See [MOQT] Sect 3.2).
 
 2.  Conventions and Definitions
 
@@ -125,11 +127,13 @@ Table of Contents
 
 3.1.  SSTS_ALGORITHMS
 
-   The SSTS_ALGORITHMS option (Option Type 0x09) communicates the list
-   of SSTS algorithms which the relay supports.  Supported algorithms
-   are serialized as a sequence of varints.  Returning an empty sequence
-   is acceptable and indicates that SSTS is not supported.  Algorithms
-   are registered in the SSTS-Algorithms Section 8.2 registry.
+   This specification defines a new MOQT Setup Option called
+   SSTS_ALGORITHMS.  The SSTS_ALGORITHMS option (Option Type 0x09)
+   communicates the list of SSTS algorithms which the endpoint supports.
+   Supported algorithms are serialized as a sequence of varints.
+   Returning an empty sequence is acceptable and indicates that SSTS is
+   not supported.  Algorithms are registered in the SSTS-Algorithms
+   registry (see Section 8.3).
 
 4.  General behaviors for all SSTS algorithms
 
@@ -147,34 +151,36 @@ Table of Contents
    support single or multiple switching sets and result in identical
    relay behavior:
 
-   *  Individual SUBSCRIBE: - the subscriber sends a separate SUBSCRIBE
-      message for each track, and appends the SWITCHING-SET-ASSIGNMENT
+   *  Individual SUBSCRIBE: the subscriber sends a separate SUBSCRIBE
+      message for each track, and appends the SWITCHING_SET_ASSIGNMENT
       parameter to assign the track to a switching set.
 
-   *  SUBSCRIBE_TRACKS: - the subscriber sends a SUBSCRIBE_TRACKS
-      message.  For each matching track, the relay will issue a PUBLISH
-      message.  The subscriber assigns tracks to switching sets by
-      appending the SWITCHING-SET-ASSIGNMENT parameter to the PUBLISH_OK
-      message.
+   *  SUBSCRIBE_TRACKS: the subscriber sends a SUBSCRIBE_TRACKS message.
+      For each matching track, the relay will issue a PUBLISH message.
+      The subscriber assigns tracks to switching sets by appending the
+      SWITCHING_SET_ASSIGNMENT parameter to the PUBLISH_OK message.
 
-   *  PUBLISH: - the publisher sends a PUBLISH message.  The subscriber
-      assigns tracks to switching sets by appending the SWITCHING-SET-
-      ASSIGNMENT parameter to the PUBLISH_OK message.
+   *  PUBLISH: the publisher sends a PUBLISH message.  The subscriber
+      assigns tracks to switching sets by appending the
+      SWITCHING_SET_ASSIGNMENT parameter to the PUBLISH_OK message.
 
    In all cases, tracks are grouped into a switching set by specifying
    the same switching set ID.
 
 5.  SWITCHING_SET_ASSIGNMENT Parameter
 
-   The SWITCHING-SET-ASSIGNMENT parameter (Parameter Type 0x41) MAY
+   This extension defines a new MOQT Parameter named
+   SWITCHING_SET_ASSIGNMENT.
+
+   The SWITCHING_SET_ASSIGNMENT parameter (Parameter Type 0x41) MAY
    appear in a SUBSCRIBE, REQUEST_UPDATE, or PUBLISH_OK message.  This
    parameter assigns a subscription to a SSTS switching set and
    specifies the algorithm to be used for switching.  Each algorithm MAY
    extend the serialization to pass additional fields.
 
-   SWITCHING-SET-ASSIGNMENT {
+   SWITCHING_SET_ASSIGNMENT {
      Switching set ID (vi64),
-     Algorithm (vi64)
+     Algorithm ID (vi64)
    }
 
    *  Switching set ID: Integer identifying the switching set.  A track
@@ -183,20 +189,26 @@ Table of Contents
       to a different switching set, the relay MUST reject the
       subscription with a Parameter Error.
 
-   *  Algorithm: integer identifying the SSTS algorithm to be used.
+   *  Algorithm ID: integer identifying the SSTS algorithm to be used.
 
 6.  Default switching algorithm
 
    This specification defines a default SSTS algorithm with a type of 0.
 
-6.1.  SWITCHING-SET-ASSIGNMENT fields
+6.1.  SWITCHING_SET_ASSIGNMENT fields
 
-   This algorithm extends the base definition of the SWITCHING-SET-
-   ASSIGNMENT parameter Section 5 to add the following fields:
+   This algorithm extends the base definition of the
+   SWITCHING_SET_ASSIGNMENT parameter Section 5 to add the following
+   fields:
 
-   SWITCHING-SET-ASSIGNMENT { Switching set ID (vi64), Algorithm ID
-   (vi64), Throughput threshold (vi64), Set throughput weight (vi64),
-   Activate switching (vi64), Set rank (8) }
+   SWITCHING_SET_ASSIGNMENT {
+     Switching set ID (vi64),
+     Algorithm ID (vi64),
+     Throughput threshold (vi64),
+     Set throughput weight (vi64),
+     Activate switching (vi64),
+     Set rank (8)
+   }
 
    *  Throughput threshold: Minimum throughput (kbps) required to select
       this track.
@@ -240,22 +252,22 @@ Table of Contents
    To modify an established switching set, the subscriber can
 
    *  Add a track to an existing set: send SUBSCRIBE or PUBLISH_OK with
-      a SWITCHING-SET-ASSIGNMENT parameter referencing an existing set.
+      a SWITCHING_SET_ASSIGNMENT parameter referencing an existing set.
 
    *  Remove a track from a set: unsubscribe from that track.
 
    *  Pause SSTS: Send REQUEST_UPDATE for any track assigned to that set
-      with a SWITCHING-SET-ASSIGNMENT parameter defining activate = 0.
+      with a SWITCHING_SET_ASSIGNMENT parameter defining activate = 0.
 
    *  Resume SSTS: Send REQUEST_UPDATE for any track assigned to that
-      set with a SWITCHING-SET-ASSIGNMENT parameter defining activate
+      set with a SWITCHING_SET_ASSIGNMENT parameter defining activate
       switching = N, where N is the number of tracks assigned to that
       switching set.
 
 6.3.  Publisher behavior
 
-   When the publisher receives a subscription with SWITCHING-SET-
-   ASSIGNMENT:
+   When the publisher receives a subscription with
+   SWITCHING_SET_ASSIGNMENT:
 
    1.  Add the subscription to the specified switching set, creating the
        set if needed.
@@ -276,10 +288,10 @@ Table of Contents
 
    If the publisher receives a PUBLISH_DONE message, or an UNSUBSCRIBE
    for a subscription that was previously added to a switching set, then
-   it must remove that subscription from the switching set and continue
+   it MUST remove that subscription from the switching set and continue
    to process the switching across the remaining subscriptions within
    that set.  The value of 'activate switching' MUST be decremented by
-   one to enable the swictching to remain active.
+   one to enable the switching to remain active.
 
    If all tracks are removed from a previously established switching
    set, then that set is considered deleted and is removed from the
@@ -308,11 +320,11 @@ Table of Contents
       subscriptions are added or removed
 
    *  'set.weight': for each switching set, the switching set weight, as
-      defined by the set throughput weight of the SWITCHING-SET-
-      ASSIGNMENT Section 5 parameter.
+      defined by the set throughput weight of the
+      SWITCHING_SET_ASSIGNMENT Section 5 parameter.
 
    *  'set.rank': for each switching set, the switching set rank, as
-      defined by the set rank field of the SWITCHING-SET-ASSIGNMENT
+      defined by the set rank field of the SWITCHING_SET_ASSIGNMENT
       Section 5 parameter.
 
    On a periodic update interval or at a minimum when an object is
@@ -349,7 +361,7 @@ for each track in a switching set:
                 +======+=================+===============+
                 | Type | Name            | Specification |
                 +======+=================+===============+
-                | TBD1 | SSTS_ALGORITHMS | This document |
+                | 0x09 | SSTS_ALGORITHMS | This document |
                 +------+-----------------+---------------+
 
                                  Table 1
@@ -358,7 +370,24 @@ for each track in a switching set:
    includes in its SETUP message to indicate support for the SSTS
    extension defined in this document.
 
-8.2.  SSTS-Algorithms
+8.2.  SWITCHING_SET_ASSIGNMENT Parameter
+
+   IANA is requested to add the following entry to the "Message
+   Parameters" registry (Section 15.7 of [MOQT]):
+
+       +================+==========================+===============+
+       | Parameter Type | Parameter Name           | Specification |
+       +================+==========================+===============+
+       | 0x41           | SWITCHING_SET_ASSIGNMENT | This document |
+       +----------------+--------------------------+---------------+
+
+                                  Table 2
+
+   SWITCHING_SET_ASSIGNMENT is a Parameter (see Section 5) that assigns
+   a subscription to a switching set, defines the switching algorithm to
+   be used and passes optional parameters as required by the algorithm.
+
+8.3.  SSTS-Algorithms
 
    This document establishes a registry for SSTS algorithms.  The
    registration policy is Specification Required (per [RFC8126],
@@ -367,14 +396,16 @@ for each track in a switching set:
                     +======+=========+===============+
                     | Type | Name    | Specification |
                     +======+=========+===============+
-                    |  0x0 | Default | this          |
+                    |  0x0 | Default | This document |
                     +------+---------+---------------+
 
-                                 Table 2
+                                 Table 3
 
-   TODO acknowledge.
+9.  Acknowledgments
 
-9.  Normative References
+   IETF moq working group.
+
+10.  Normative References
 
    [MOQT]     Nandakumar, S., Vasiliev, V., Swett, I., and A. Frindell,
               "Media over QUIC Transport", Work in Progress, Internet-
