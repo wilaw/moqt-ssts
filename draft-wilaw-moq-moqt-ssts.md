@@ -100,6 +100,37 @@ switching sets and result in identical relay behavior:
 
 In all cases, tracks are grouped into a switching set by specifying the same switching set ID.
 
+# SWITCHING_SET_ASSIGNMENT Parameter {#switching-set-assignment-param}
+
+The SWITCHING-SET-ASSIGNMENT parameter (Parameter Type 0x41) MAY appear in a SUBSCRIBE,
+REQUEST_UPDATE, or PUBLISH_OK message. This parameter assigns a subscription to a SSTS
+switching set and specifies the algorithm to be used for switching. Each algorithm MAY
+extend the serialization to pass additional fields.
+
+~~~
+SWITCHING-SET-ASSIGNMENT {
+  Switching set ID (vi64),
+  Algorithm (vi64)
+}
+~~~
+
+* Switching set ID: Integer identifying the switching set. A track MUST only be assigned
+  to one switching set at a time. If a subscription attempts to assign a track that is
+  already assigned to a different switching set, the relay MUST reject the subscription
+  with a Parameter Error.
+* Algorithm: integer identifying the SSTS algorithm to be used.
+
+
+# SSTS_ALGORITHMS {#ssts-algorithms}
+
+The SSTS_ALGORITHMS option (Option Type 0x09) communicates the list of SSTS
+algorithms which the relay supports. Supported algorithms are serialized as
+a sequence of varints. Returning an empty sequence is acceptable and indicates
+that SSTS is not supported. Algorithms are registered in the SSTS-Algorithms
+{{iana-ssts-algorithms}} registry.
+
+The default value is any empty list which prohibits the use of SSTS.
+
 # Default switching algorithm
 
 This specification defines a default SSTS algorithm with a type of 0.
@@ -237,7 +268,7 @@ registry (Section 15.4 of {{MOQT}}):
 |------|------------------------|----------------|
 | TBD1 | FETCH_PACING_SUPPORTED | This document  |
 
-FETCH_PACING_SUPPORTED is a boolean Setup Option (see {{fetch-pacing-setup-extension}})
+FETCH_PACING_SUPPORTED is a boolean Setup Option (see )
 that an endpoint includes in its SETUP message to indicate support for the
 FETCH Pacing extension defined in this document.
 
@@ -250,7 +281,7 @@ registry (Section 15.7 of {{MOQT}}):
 |----------------|----------------|----------------|
 | TBD2           | PACING_RATE    | This document  |
 
-PACING_RATE is a Message Parameter (see {{pacing-rate-message-parameter}}) that a
+PACING_RATE is a Message Parameter (see ) that a
 client includes in a FETCH message to activate pacing for that request,
 once FETCH_PACING_SUPPORTED has been successfully negotiated per Section 3.2 of
 {{MOQT}}.
