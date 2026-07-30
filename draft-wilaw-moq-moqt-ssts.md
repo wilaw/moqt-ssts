@@ -9,8 +9,8 @@ number:
 date:
 consensus: true
 v: 3
-area: AREA
-workgroup: moq
+area: "Web and Internet Transport"
+workgroup: "Media Over QUIC"
 keyword:
  - moq
  - moqt
