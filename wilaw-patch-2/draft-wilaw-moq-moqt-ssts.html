@@ -1200,7 +1200,7 @@ svg {
             <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-default-switching-algorithm" class="internal xref">Default switching algorithm</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
-                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-switching-set-assignment-fi" class="internal xref">SWITCHING-SET-ASSIGNMENT fields</a></p>
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-switching_set_assignment-fi" class="internal xref">SWITCHING_SET_ASSIGNMENT fields</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
                 <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-subscriber-behavior" class="internal xref">Subscriber behavior</a></p>
@@ -1225,15 +1225,21 @@ svg {
                 <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-ssts_algorithms-setup-optio" class="internal xref">SSTS_ALGORITHMS Setup Option</a></p>
 </li>
               <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
-                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-ssts-algorithms" class="internal xref">SSTS-Algorithms</a></p>
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-switching_set_assignment-par" class="internal xref">SWITCHING_SET_ASSIGNMENT Parameter</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.3">
+                <p id="section-toc.1-1.8.2.3.1"><a href="#section-8.3" class="auto internal xref">8.3</a>.  <a href="#name-ssts-algorithms" class="internal xref">SSTS-Algorithms</a></p>
 </li>
             </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
-            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+            <p id="section-toc.1-1.9.1"><a href="#section-9" class="auto internal xref">9</a>.  <a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.10">
-            <p id="section-toc.1-1.10.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
+            <p id="section-toc.1-1.10.1"><a href="#section-10" class="auto internal xref">10</a>. <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.11">
+            <p id="section-toc.1-1.11.1"><a href="#appendix-A" class="auto internal xref"></a><a href="#name-authors-addresses" class="internal xref">Authors' Addresses</a></p>
 </li>
         </ul>
 </nav>
@@ -1247,11 +1253,11 @@ svg {
 <p id="section-1-1">Sender Side Track Switching (SSTS) is a subscriber-initiated and controlled behavior in which
 a publisher dynamically selects which track to forward from a switching set based on
 various algorithms. Each algorithm defines a set of attributes which are passed in the
-SWITCHING-SET-ASSIGNMENT parameter <a href="#switching-set-assignment-param" class="auto internal xref">Section 5</a> along with a
+SWITCHING_SET_ASSIGNMENT parameter <a href="#switching-set-assignment-param" class="auto internal xref">Section 5</a> along with a
 complimentary set of rules for subscriber behavior and relay behavior.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">This specification defines a default algorithm - type 0. Other algorithms are referenced in the
-"SSTS Algorithms" registry <a href="#iana-ssts-algorithms" class="auto internal xref">Section 8.2</a>.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">SSTS is implemented as a MOQT Extension(See <span>[<a href="#MOQT" class="cite xref">MOQT</a>]</span> Sect 3.2).<a href="#section-1-3" class="pilcrow">¶</a></p>
+"SSTS Algorithms" registry (<a href="#iana-ssts-algorithms" class="auto internal xref">Section 8.3</a>).<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">SSTS is implemented as a MOQT Extension (See <span>[<a href="#MOQT" class="cite xref">MOQT</a>]</span> Sect 3.2).<a href="#section-1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1279,11 +1285,11 @@ with an empty list, prohibits the use of SSTS.<a href="#section-3-2" class="pilc
         <h3 id="name-ssts_algorithms">
 <a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-ssts_algorithms" class="section-name selfRef">SSTS_ALGORITHMS</a>
         </h3>
-<p id="section-3.1-1">The SSTS_ALGORITHMS option (Option Type 0x09) communicates the list of SSTS
-algorithms which the relay supports. Supported algorithms are serialized as
-a sequence of varints. Returning an empty sequence is acceptable and indicates
-that SSTS is not supported. Algorithms are registered in the SSTS-Algorithms
-<a href="#iana-ssts-algorithms" class="auto internal xref">Section 8.2</a> registry.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-1">This specification defines a new MOQT Setup Option called SSTS_ALGORITHMS. The SSTS_ALGORITHMS
+option (Option Type 0x09) communicates the list of SSTS algorithms which the endpoint supports.
+Supported algorithms are serialized as a sequence of varints. Returning an empty sequence is
+acceptable and indicates that SSTS is not supported. Algorithms are registered in the SSTS-Algorithms
+registry (see <a href="#iana-ssts-algorithms" class="auto internal xref">Section 8.3</a>).<a href="#section-3.1-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1303,17 +1309,17 @@ selects exactly one track per switching set to forward at any given time.<a href
 switching sets and result in identical relay behavior:<a href="#section-4-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-4-3.1">
-          <p id="section-4-3.1.1">Individual SUBSCRIBE: - the subscriber sends a separate SUBSCRIBE message for each track,
-and appends the SWITCHING-SET-ASSIGNMENT parameter to assign the track to a switching set.<a href="#section-4-3.1.1" class="pilcrow">¶</a></p>
+          <p id="section-4-3.1.1">Individual SUBSCRIBE: the subscriber sends a separate SUBSCRIBE message for each track,
+and appends the SWITCHING_SET_ASSIGNMENT parameter to assign the track to a switching set.<a href="#section-4-3.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-4-3.2">
-          <p id="section-4-3.2.1">SUBSCRIBE_TRACKS: - the subscriber sends a SUBSCRIBE_TRACKS message. For each matching
+          <p id="section-4-3.2.1">SUBSCRIBE_TRACKS: the subscriber sends a SUBSCRIBE_TRACKS message. For each matching
 track, the relay will issue a PUBLISH message. The subscriber assigns tracks to switching sets
-by appending the SWITCHING-SET-ASSIGNMENT parameter to the PUBLISH_OK message.<a href="#section-4-3.2.1" class="pilcrow">¶</a></p>
+by appending the SWITCHING_SET_ASSIGNMENT parameter to the PUBLISH_OK message.<a href="#section-4-3.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-4-3.3">
-          <p id="section-4-3.3.1">PUBLISH: - the publisher sends a PUBLISH message. The subscriber assigns tracks to switching sets
-by appending the SWITCHING-SET-ASSIGNMENT parameter to the PUBLISH_OK message.<a href="#section-4-3.3.1" class="pilcrow">¶</a></p>
+          <p id="section-4-3.3.1">PUBLISH: the publisher sends a PUBLISH message. The subscriber assigns tracks to switching sets
+by appending the SWITCHING_SET_ASSIGNMENT parameter to the PUBLISH_OK message.<a href="#section-4-3.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 <p id="section-4-4">In all cases, tracks are grouped into a switching set by specifying the same switching set ID.<a href="#section-4-4" class="pilcrow">¶</a></p>
@@ -1324,27 +1330,28 @@ by appending the SWITCHING-SET-ASSIGNMENT parameter to the PUBLISH_OK message.<a
       <h2 id="name-switching_set_assignment-pa">
 <a href="#section-5" class="section-number selfRef">5. </a><a href="#name-switching_set_assignment-pa" class="section-name selfRef">SWITCHING_SET_ASSIGNMENT Parameter</a>
       </h2>
-<p id="section-5-1">The SWITCHING-SET-ASSIGNMENT parameter (Parameter Type 0x41) <span class="bcp14">MAY</span> appear in a SUBSCRIBE,
+<p id="section-5-1">This extension defines a new MOQT Parameter named SWITCHING_SET_ASSIGNMENT.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<p id="section-5-2">The SWITCHING_SET_ASSIGNMENT parameter (Parameter Type 0x41) <span class="bcp14">MAY</span> appear in a SUBSCRIBE,
 REQUEST_UPDATE, or PUBLISH_OK message. This parameter assigns a subscription to a SSTS
 switching set and specifies the algorithm to be used for switching. Each algorithm <span class="bcp14">MAY</span>
-extend the serialization to pass additional fields.<a href="#section-5-1" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-5-2">
+extend the serialization to pass additional fields.<a href="#section-5-2" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5-3">
 <pre>
-SWITCHING-SET-ASSIGNMENT {
+SWITCHING_SET_ASSIGNMENT {
   Switching set ID (vi64),
-  Algorithm (vi64)
+  Algorithm ID (vi64)
 }
-</pre><a href="#section-5-2" class="pilcrow">¶</a>
+</pre><a href="#section-5-3" class="pilcrow">¶</a>
 </div>
 <ul class="normal">
-<li class="normal" id="section-5-3.1">
-          <p id="section-5-3.1.1">Switching set ID: Integer identifying the switching set. A track <span class="bcp14">MUST</span> only be assigned
+<li class="normal" id="section-5-4.1">
+          <p id="section-5-4.1.1">Switching set ID: Integer identifying the switching set. A track <span class="bcp14">MUST</span> only be assigned
 to one switching set at a time. If a subscription attempts to assign a track that is
 already assigned to a different switching set, the relay <span class="bcp14">MUST</span> reject the subscription
-with a Parameter Error.<a href="#section-5-3.1.1" class="pilcrow">¶</a></p>
+with a Parameter Error.<a href="#section-5-4.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-5-3.2">
-          <p id="section-5-3.2.1">Algorithm: integer identifying the SSTS algorithm to be used.<a href="#section-5-3.2.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-5-4.2">
+          <p id="section-5-4.2.1">Algorithm ID: integer identifying the SSTS algorithm to be used.<a href="#section-5-4.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
 </section>
@@ -1355,21 +1362,25 @@ with a Parameter Error.<a href="#section-5-3.1.1" class="pilcrow">¶</a></p>
 <a href="#section-6" class="section-number selfRef">6. </a><a href="#name-default-switching-algorithm" class="section-name selfRef">Default switching algorithm</a>
       </h2>
 <p id="section-6-1">This specification defines a default SSTS algorithm with a type of 0.<a href="#section-6-1" class="pilcrow">¶</a></p>
-<div id="switching-set-assignment-fields">
+<div id="switchingsetassignment-fields">
 <section id="section-6.1">
-        <h3 id="name-switching-set-assignment-fi">
-<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-switching-set-assignment-fi" class="section-name selfRef">SWITCHING-SET-ASSIGNMENT fields</a>
+        <h3 id="name-switching_set_assignment-fi">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-switching_set_assignment-fi" class="section-name selfRef">SWITCHING_SET_ASSIGNMENT fields</a>
         </h3>
-<p id="section-6.1-1">This algorithm extends the base definition of the SWITCHING-SET-ASSIGNMENT parameter
+<p id="section-6.1-1">This algorithm extends the base definition of the SWITCHING_SET_ASSIGNMENT parameter
 <a href="#switching-set-assignment-param" class="auto internal xref">Section 5</a> to add the following fields:<a href="#section-6.1-1" class="pilcrow">¶</a></p>
-<p id="section-6.1-2">SWITCHING-SET-ASSIGNMENT {
+<div class="alignLeft art-text artwork" id="section-6.1-2">
+<pre>
+SWITCHING_SET_ASSIGNMENT {
   Switching set ID (vi64),
   Algorithm ID (vi64),
   Throughput threshold (vi64),
   Set throughput weight (vi64),
   Activate switching (vi64),
   Set rank (8)
-}<a href="#section-6.1-2" class="pilcrow">¶</a></p>
+}
+</pre><a href="#section-6.1-2" class="pilcrow">¶</a>
+</div>
 <ul class="normal">
 <li class="normal" id="section-6.1-3.1">
             <p id="section-6.1-3.1.1">Throughput threshold: Minimum throughput (kbps) required to select this track.<a href="#section-6.1-3.1.1" class="pilcrow">¶</a></p>
@@ -1413,18 +1424,18 @@ switching set.<a href="#section-6.2-2" class="pilcrow">¶</a></p>
 <p id="section-6.2-3">To modify an established switching set, the subscriber can<a href="#section-6.2-3" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-6.2-4.1">
-            <p id="section-6.2-4.1.1">Add a track to an existing set: send SUBSCRIBE or PUBLISH_OK with a SWITCHING-SET-ASSIGNMENT parameter
+            <p id="section-6.2-4.1.1">Add a track to an existing set: send SUBSCRIBE or PUBLISH_OK with a SWITCHING_SET_ASSIGNMENT parameter
 referencing an existing set.<a href="#section-6.2-4.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.2-4.2">
             <p id="section-6.2-4.2.1">Remove a track from a set: unsubscribe from that track.<a href="#section-6.2-4.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.2-4.3">
-            <p id="section-6.2-4.3.1">Pause SSTS: Send REQUEST_UPDATE for any track assigned to that set with a SWITCHING-SET-ASSIGNMENT
+            <p id="section-6.2-4.3.1">Pause SSTS: Send REQUEST_UPDATE for any track assigned to that set with a SWITCHING_SET_ASSIGNMENT
 parameter defining activate = 0.<a href="#section-6.2-4.3.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.2-4.4">
-            <p id="section-6.2-4.4.1">Resume SSTS: Send REQUEST_UPDATE for any track assigned to that set with a SWITCHING-SET-ASSIGNMENT
+            <p id="section-6.2-4.4.1">Resume SSTS: Send REQUEST_UPDATE for any track assigned to that set with a SWITCHING_SET_ASSIGNMENT
 parameter defining activate switching = N, where N is the number of tracks assigned to that switching set.<a href="#section-6.2-4.4.1" class="pilcrow">¶</a></p>
 </li>
         </ul>
@@ -1435,7 +1446,7 @@ parameter defining activate switching = N, where N is the number of tracks assig
         <h3 id="name-publisher-behavior">
 <a href="#section-6.3" class="section-number selfRef">6.3. </a><a href="#name-publisher-behavior" class="section-name selfRef">Publisher behavior</a>
         </h3>
-<p id="section-6.3-1">When the publisher receives a subscription with SWITCHING-SET-ASSIGNMENT:<a href="#section-6.3-1" class="pilcrow">¶</a></p>
+<p id="section-6.3-1">When the publisher receives a subscription with SWITCHING_SET_ASSIGNMENT:<a href="#section-6.3-1" class="pilcrow">¶</a></p>
 <ol start="1" type="1" class="normal type-1" id="section-6.3-2">
 <li id="section-6.3-2.1">
             <p id="section-6.3-2.1.1">Add the subscription to the specified switching set, creating the set if needed.<a href="#section-6.3-2.1.1" class="pilcrow">¶</a></p>
@@ -1457,9 +1468,9 @@ when an Object is received or published on a Group larger than previously larges
 </li>
         </ol>
 <p id="section-6.3-3">If the publisher receives a PUBLISH_DONE message, or an UNSUBSCRIBE for a subscription that was
-previously added to a switching set, then it must remove that subscription from the switching set
+previously added to a switching set, then it <span class="bcp14">MUST</span> remove that subscription from the switching set
 and continue to process the switching across the remaining subscriptions within that set. The value of
-'activate switching' <span class="bcp14">MUST</span> be decremented by one to enable the swictching to remain active.<a href="#section-6.3-3" class="pilcrow">¶</a></p>
+'activate switching' <span class="bcp14">MUST</span> be decremented by one to enable the switching to remain active.<a href="#section-6.3-3" class="pilcrow">¶</a></p>
 <p id="section-6.3-4">If all tracks are removed from a previously established switching set, then that set is
 considered deleted and is removed from the bandwidth allocation algorithm.<a href="#section-6.3-4" class="pilcrow">¶</a></p>
 <p id="section-6.3-5">Publishers <span class="bcp14">SHOULD</span> maintain a forward=1 upstream state (if any) on all tracks within a switching set,
@@ -1485,11 +1496,11 @@ is not defined by this algorithm and might vary between implementations.<a href=
 </li>
             <li class="normal" id="section-6.3.1-2.3">
               <p id="section-6.3.1-2.3.1">'set.weight': for each switching set, the switching set weight, as defined by the set
-throughput weight of the SWITCHING-SET-ASSIGNMENT <a href="#switching-set-assignment-param" class="auto internal xref">Section 5</a> parameter.<a href="#section-6.3.1-2.3.1" class="pilcrow">¶</a></p>
+throughput weight of the SWITCHING_SET_ASSIGNMENT <a href="#switching-set-assignment-param" class="auto internal xref">Section 5</a> parameter.<a href="#section-6.3.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-6.3.1-2.4">
               <p id="section-6.3.1-2.4.1">'set.rank': for each switching set, the switching set rank, as defined by the set
-rank field of the SWITCHING-SET-ASSIGNMENT <a href="#switching-set-assignment-param" class="auto internal xref">Section 5</a> parameter.<a href="#section-6.3.1-2.4.1" class="pilcrow">¶</a></p>
+rank field of the SWITCHING_SET_ASSIGNMENT <a href="#switching-set-assignment-param" class="auto internal xref">Section 5</a> parameter.<a href="#section-6.3.1-2.4.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <p id="section-6.3.1-3">On a periodic update interval or at a minimum when an object is received/published on a group
@@ -1547,26 +1558,55 @@ registry (Section 15.4 of <span>[<a href="#MOQT" class="cite xref">MOQT</a>]</sp
           </thead>
           <tbody>
             <tr>
-              <td class="text-left" rowspan="1" colspan="1">TBD1</td>
+              <td class="text-left" rowspan="1" colspan="1">0x09</td>
               <td class="text-left" rowspan="1" colspan="1">SSTS_ALGORITHMS</td>
               <td class="text-left" rowspan="1" colspan="1">This document</td>
             </tr>
           </tbody>
         </table>
-<p id="section-8.1-3">SSTS_ALGORITHMS is a Setup Option (see <a href="#ssts-algorithms" class="auto internal xref">Section 3.1</a>)
-that an endpoint includes in its SETUP message to indicate support for the
+<p id="section-8.1-3">SSTS_ALGORITHMS is a Setup Option (see <a href="#ssts-algorithms" class="auto internal xref">Section 3.1</a>) that an
+endpoint includes in its SETUP message to indicate support for the
 SSTS extension defined in this document.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="iana-ssts-algorithms">
+<div id="switchingsetassignment-parameter">
 <section id="section-8.2">
-        <h3 id="name-ssts-algorithms">
-<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-ssts-algorithms" class="section-name selfRef">SSTS-Algorithms</a>
+        <h3 id="name-switching_set_assignment-par">
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-switching_set_assignment-par" class="section-name selfRef">SWITCHING_SET_ASSIGNMENT Parameter</a>
         </h3>
-<p id="section-8.2-1">This document establishes a registry for SSTS algorithms. The
-registration policy is Specification Required (per <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>], <a href="https://rfc-editor.org/rfc/rfc8126#section-4.6" class="relref">Section 4.6</a></span>).<a href="#section-8.2-1" class="pilcrow">¶</a></p>
+<p id="section-8.2-1">IANA is requested to add the following entry to the "Message Parameters"
+registry (Section 15.7 of <span>[<a href="#MOQT" class="cite xref">MOQT</a>]</span>):<a href="#section-8.2-1" class="pilcrow">¶</a></p>
 <table class="center" id="table-2">
           <caption><a href="#table-2" class="selfRef">Table 2</a></caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Parameter Type</th>
+              <th class="text-left" rowspan="1" colspan="1">Parameter Name</th>
+              <th class="text-left" rowspan="1" colspan="1">Specification</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">0x41</td>
+              <td class="text-left" rowspan="1" colspan="1">SWITCHING_SET_ASSIGNMENT</td>
+              <td class="text-left" rowspan="1" colspan="1">This document</td>
+            </tr>
+          </tbody>
+        </table>
+<p id="section-8.2-3">SWITCHING_SET_ASSIGNMENT is a Parameter (see <a href="#switching-set-assignment-param" class="auto internal xref">Section 5</a>)
+that assigns a subscription to a switching set, defines the switching algorithm
+to be used and passes optional parameters as required by the algorithm.<a href="#section-8.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="iana-ssts-algorithms">
+<section id="section-8.3">
+        <h3 id="name-ssts-algorithms">
+<a href="#section-8.3" class="section-number selfRef">8.3. </a><a href="#name-ssts-algorithms" class="section-name selfRef">SSTS-Algorithms</a>
+        </h3>
+<p id="section-8.3-1">This document establishes a registry for SSTS algorithms. The
+registration policy is Specification Required (per <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>], <a href="https://rfc-editor.org/rfc/rfc8126#section-4.6" class="relref">Section 4.6</a></span>).<a href="#section-8.3-1" class="pilcrow">¶</a></p>
+<table class="center" id="table-3">
+          <caption><a href="#table-3" class="selfRef">Table 3</a></caption>
 <thead>
             <tr>
               <th class="text-right" rowspan="1" colspan="1">Type</th>
@@ -1578,19 +1618,26 @@ registration policy is Specification Required (per <span>[<a href="#RFC8126" cla
             <tr>
               <td class="text-right" rowspan="1" colspan="1">0x0</td>
               <td class="text-left" rowspan="1" colspan="1">Default</td>
-              <td class="text-left" rowspan="1" colspan="1">this</td>
+              <td class="text-left" rowspan="1" colspan="1">This document</td>
             </tr>
           </tbody>
         </table>
-<p id="section-8.2-3">TODO acknowledge.<a href="#section-8.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
+</section>
+</div>
+<div id="acknowledgments">
+<section id="section-9">
+      <h2 id="name-acknowledgments">
+<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
+      </h2>
+<p id="section-9-1">IETF moq working group.<a href="#section-9-1" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="sec-normative-references">
-<section id="section-9">
+<section id="section-10">
       <h2 id="name-normative-references">
-<a href="#section-9" class="section-number selfRef">9. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+<a href="#section-10" class="section-number selfRef">10. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
       </h2>
 <dl class="references">
 <dt id="MOQT">[MOQT]</dt>
