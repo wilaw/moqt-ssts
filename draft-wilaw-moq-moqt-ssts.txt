@@ -2,7 +2,7 @@
 
 
 
-moq                                                               W. Law
+Media Over QUIC                                                   W. Law
 Internet-Draft                                                    Akamai
 Intended status: Standards Track                                I. Swett
 Expires: 31 January 2027                                          Google
@@ -74,9 +74,10 @@ Table of Contents
 
    1.  Introduction
    2.  Conventions and Definitions
-   3.  General behaviors for all SSTS algorithms
-   4.  SWITCHING_SET_ASSIGNMENT Parameter
-   5.  SSTS_ALGORITHMS
+   3.  Extension negotiation
+     3.1.  SSTS_ALGORITHMS
+   4.  General behaviors for all SSTS algorithms
+   5.  SWITCHING_SET_ASSIGNMENT Parameter
    6.  Default switching algorithm
      6.1.  SWITCHING-SET-ASSIGNMENT fields
      6.2.  Subscriber behavior
@@ -84,7 +85,8 @@ Table of Contents
        6.3.1.  Bandwidth Allocation
    7.  Security Considerations
    8.  IANA Considerations
-     8.1.  SSTS-Algorithms
+     8.1.  SSTS_ALGORITHMS Setup Option
+     8.2.  SSTS-Algorithms
    9.  Normative References
    Authors' Addresses
 
@@ -94,16 +96,15 @@ Table of Contents
    controlled behavior in which a publisher dynamically selects which
    track to forward from a switching set based on various algorithms.
    Each algorithm defines a set of attributes which are passed in the
-   SWITCHING-SET-ASSIGNMENT parameter Section 4 along with a
+   SWITCHING-SET-ASSIGNMENT parameter Section 5 along with a
    complimentary set of rules for subscriber behavior and relay
    behavior.
 
    This specification defines a default algorithm - type 0.  Other
    algorithms are referenced in the "SSTS Algorithms" registry
-   Section 8.1.
+   Section 8.2.
 
-   During SETUP, a relay communicates which SSTS algorithms it supports
-   by passing the SSTS_ALGORITHMS Setup Option Section 5.
+   SSTS is implemented as a MOQT Extension(See [MOQT] Sect 3.2).
 
 2.  Conventions and Definitions
 
@@ -113,7 +114,24 @@ Table of Contents
    BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all
    capitals, as shown here.
 
-3.  General behaviors for all SSTS algorithms
+3.  Extension negotiation
+
+   During MOQT SETUP, an endpoint communicates which SSTS algorithms it
+   supports by passing the SSTS_ALGORITHMS Setup Option Section 3.1.
+
+   The absence of the SSTS_ALGORITHMS setup option, or an
+   SSTS_ALGORITHMS setup option with an empty list, prohibits the use of
+   SSTS.
+
+3.1.  SSTS_ALGORITHMS
+
+   The SSTS_ALGORITHMS option (Option Type 0x09) communicates the list
+   of SSTS algorithms which the relay supports.  Supported algorithms
+   are serialized as a sequence of varints.  Returning an empty sequence
+   is acceptable and indicates that SSTS is not supported.  Algorithms
+   are registered in the SSTS-Algorithms Section 8.2 registry.
+
+4.  General behaviors for all SSTS algorithms
 
    The subscriber is responsible for grouping tracks into switching sets
    based on application-level knowledge.  A switching set is a
@@ -146,7 +164,7 @@ Table of Contents
    In all cases, tracks are grouped into a switching set by specifying
    the same switching set ID.
 
-4.  SWITCHING_SET_ASSIGNMENT Parameter
+5.  SWITCHING_SET_ASSIGNMENT Parameter
 
    The SWITCHING-SET-ASSIGNMENT parameter (Parameter Type 0x41) MAY
    appear in a SUBSCRIBE, REQUEST_UPDATE, or PUBLISH_OK message.  This
@@ -167,16 +185,6 @@ Table of Contents
 
    *  Algorithm: integer identifying the SSTS algorithm to be used.
 
-5.  SSTS_ALGORITHMS
-
-   The SSTS_ALGORITHMS option (Option Type 0x09) communicates the list
-   of SSTS algorithms which the relay supports.  Supported algorithms
-   are serialized as a sequence of varints.  Returning an empty sequence
-   is acceptable and indicates that SSTS is not supported.  Algorithms
-   are registered in the SSTS-Algorithms Section 8.1 registry.
-
-   The default value is any empty list which prohibits the use of SSTS.
-
 6.  Default switching algorithm
 
    This specification defines a default SSTS algorithm with a type of 0.
@@ -184,7 +192,7 @@ Table of Contents
 6.1.  SWITCHING-SET-ASSIGNMENT fields
 
    This algorithm extends the base definition of the SWITCHING-SET-
-   ASSIGNMENT parameter Section 4 to add the following fields:
+   ASSIGNMENT parameter Section 5 to add the following fields:
 
    SWITCHING-SET-ASSIGNMENT { Switching set ID (vi64), Algorithm ID
    (vi64), Throughput threshold (vi64), Set throughput weight (vi64),
@@ -301,11 +309,11 @@ Table of Contents
 
    *  'set.weight': for each switching set, the switching set weight, as
       defined by the set throughput weight of the SWITCHING-SET-
-      ASSIGNMENT Section 4 parameter.
+      ASSIGNMENT Section 5 parameter.
 
    *  'set.rank': for each switching set, the switching set rank, as
       defined by the set rank field of the SWITCHING-SET-ASSIGNMENT
-      Section 4 parameter.
+      Section 5 parameter.
 
    On a periodic update interval or at a minimum when an object is
    received/published on a group larger than previously largest group,
@@ -333,7 +341,24 @@ for each track in a switching set:
 
 8.  IANA Considerations
 
-8.1.  SSTS-Algorithms
+8.1.  SSTS_ALGORITHMS Setup Option
+
+   IANA is requested to add the following entry to the "Setup Options"
+   registry (Section 15.4 of [MOQT]):
+
+                +======+=================+===============+
+                | Type | Name            | Specification |
+                +======+=================+===============+
+                | TBD1 | SSTS_ALGORITHMS | This document |
+                +------+-----------------+---------------+
+
+                                 Table 1
+
+   SSTS_ALGORITHMS is a Setup Option (see Section 3.1) that an endpoint
+   includes in its SETUP message to indicate support for the SSTS
+   extension defined in this document.
+
+8.2.  SSTS-Algorithms
 
    This document establishes a registry for SSTS algorithms.  The
    registration policy is Specification Required (per [RFC8126],
@@ -345,7 +370,7 @@ for each track in a switching set:
                     |  0x0 | Default | this          |
                     +------+---------+---------------+
 
-                                 Table 1
+                                 Table 2
 
    TODO acknowledge.
 

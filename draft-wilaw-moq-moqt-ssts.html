@@ -1062,7 +1062,7 @@ svg {
 <div id="internal-metadata" class="document-information">
 <dl id="identifiers">
 <dt class="label-workgroup">Workgroup:</dt>
-<dd class="workgroup">moq</dd>
+<dd class="workgroup">Media Over QUIC</dd>
 <dt class="label-internet-draft">Internet-Draft:</dt>
 <dd class="internet-draft">draft-wilaw-moq-moqt-ssts-latest</dd>
 <dt class="label-published">Published:</dt>
@@ -1183,13 +1183,18 @@ svg {
             <p id="section-toc.1-1.2.1" class="keepWithNext"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-conventions-and-definitions" class="internal xref">Conventions and Definitions</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
-            <p id="section-toc.1-1.3.1" class="keepWithNext"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-general-behaviors-for-all-s" class="internal xref">General behaviors for all SSTS algorithms</a></p>
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-extension-negotiation" class="internal xref">Extension negotiation</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
+                <p id="section-toc.1-1.3.2.1.1" class="keepWithNext"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-ssts_algorithms" class="internal xref">SSTS_ALGORITHMS</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
-            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-switching_set_assignment-pa" class="internal xref">SWITCHING_SET_ASSIGNMENT Parameter</a></p>
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-general-behaviors-for-all-s" class="internal xref">General behaviors for all SSTS algorithms</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
-            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-ssts_algorithms" class="internal xref">SSTS_ALGORITHMS</a></p>
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-switching_set_assignment-pa" class="internal xref">SWITCHING_SET_ASSIGNMENT Parameter</a></p>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
             <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-default-switching-algorithm" class="internal xref">Default switching algorithm</a></p>
@@ -1217,7 +1222,10 @@ svg {
             <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
 <ul class="compact toc ulBare ulEmpty">
 <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.1">
-                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-ssts-algorithms" class="internal xref">SSTS-Algorithms</a></p>
+                <p id="section-toc.1-1.8.2.1.1"><a href="#section-8.1" class="auto internal xref">8.1</a>.  <a href="#name-ssts_algorithms-setup-optio" class="internal xref">SSTS_ALGORITHMS Setup Option</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8.2.2">
+                <p id="section-toc.1-1.8.2.2.1"><a href="#section-8.2" class="auto internal xref">8.2</a>.  <a href="#name-ssts-algorithms" class="internal xref">SSTS-Algorithms</a></p>
 </li>
             </ul>
 </li>
@@ -1239,12 +1247,11 @@ svg {
 <p id="section-1-1">Sender Side Track Switching (SSTS) is a subscriber-initiated and controlled behavior in which
 a publisher dynamically selects which track to forward from a switching set based on
 various algorithms. Each algorithm defines a set of attributes which are passed in the
-SWITCHING-SET-ASSIGNMENT parameter <a href="#switching-set-assignment-param" class="auto internal xref">Section 4</a> along with a
+SWITCHING-SET-ASSIGNMENT parameter <a href="#switching-set-assignment-param" class="auto internal xref">Section 5</a> along with a
 complimentary set of rules for subscriber behavior and relay behavior.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">This specification defines a default algorithm - type 0. Other algorithms are referenced in the
-"SSTS Algorithms" registry <a href="#iana-ssts-algorithms" class="auto internal xref">Section 8.1</a>.<a href="#section-1-2" class="pilcrow">¶</a></p>
-<p id="section-1-3">During SETUP, a relay communicates which SSTS algorithms it supports by passing the
-SSTS_ALGORITHMS Setup Option <a href="#ssts-algorithms" class="auto internal xref">Section 5</a>.<a href="#section-1-3" class="pilcrow">¶</a></p>
+"SSTS Algorithms" registry <a href="#iana-ssts-algorithms" class="auto internal xref">Section 8.2</a>.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">SSTS is implemented as a MOQT Extension(See <span>[<a href="#MOQT" class="cite xref">MOQT</a>]</span> Sect 3.2).<a href="#section-1-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="conventions-and-definitions">
@@ -1258,78 +1265,88 @@ described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</s
 appear in all capitals, as shown here.<a href="#section-2-1" class="pilcrow">¶</a></p>
 </section>
 </div>
-<div id="ssts-general-requirements">
+<div id="extension-negotiation">
 <section id="section-3">
-      <h2 id="name-general-behaviors-for-all-s">
-<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-general-behaviors-for-all-s" class="section-name selfRef">General behaviors for all SSTS algorithms</a>
+      <h2 id="name-extension-negotiation">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-extension-negotiation" class="section-name selfRef">Extension negotiation</a>
       </h2>
-<p id="section-3-1">The subscriber is responsible for grouping tracks into switching sets based on application-level
+<p id="section-3-1">During MOQT SETUP, an endpoint communicates which SSTS algorithms it supports by passing the
+SSTS_ALGORITHMS Setup Option <a href="#ssts-algorithms" class="auto internal xref">Section 3.1</a>.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<p id="section-3-2">The absence of the SSTS_ALGORITHMS setup option, or an SSTS_ALGORITHMS setup option
+with an empty list, prohibits the use of SSTS.<a href="#section-3-2" class="pilcrow">¶</a></p>
+<div id="ssts-algorithms">
+<section id="section-3.1">
+        <h3 id="name-ssts_algorithms">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-ssts_algorithms" class="section-name selfRef">SSTS_ALGORITHMS</a>
+        </h3>
+<p id="section-3.1-1">The SSTS_ALGORITHMS option (Option Type 0x09) communicates the list of SSTS
+algorithms which the relay supports. Supported algorithms are serialized as
+a sequence of varints. Returning an empty sequence is acceptable and indicates
+that SSTS is not supported. Algorithms are registered in the SSTS-Algorithms
+<a href="#iana-ssts-algorithms" class="auto internal xref">Section 8.2</a> registry.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="ssts-general-requirements">
+<section id="section-4">
+      <h2 id="name-general-behaviors-for-all-s">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-general-behaviors-for-all-s" class="section-name selfRef">General behaviors for all SSTS algorithms</a>
+      </h2>
+<p id="section-4-1">The subscriber is responsible for grouping tracks into switching sets based on application-level
 knowledge. A switching set is a collection of tracks representing the same content encoded at
 different throughput levels, typically from a single source. Tracks within a switching set are
 time-aligned at certain group boundaries, allowing the relay to switch between tracks at these
 boundaries while ensuring the subscriber receives uninterrupted content from the set. The relay
-selects exactly one track per switching set to forward at any given time.<a href="#section-3-1" class="pilcrow">¶</a></p>
-<p id="section-3-2">Subscribers can create switching sets through three methods. All support single or multiple
-switching sets and result in identical relay behavior:<a href="#section-3-2" class="pilcrow">¶</a></p>
+selects exactly one track per switching set to forward at any given time.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-2">Subscribers can create switching sets through three methods. All support single or multiple
+switching sets and result in identical relay behavior:<a href="#section-4-2" class="pilcrow">¶</a></p>
 <ul class="normal">
-<li class="normal" id="section-3-3.1">
-          <p id="section-3-3.1.1">Individual SUBSCRIBE: - the subscriber sends a separate SUBSCRIBE message for each track,
-and appends the SWITCHING-SET-ASSIGNMENT parameter to assign the track to a switching set.<a href="#section-3-3.1.1" class="pilcrow">¶</a></p>
+<li class="normal" id="section-4-3.1">
+          <p id="section-4-3.1.1">Individual SUBSCRIBE: - the subscriber sends a separate SUBSCRIBE message for each track,
+and appends the SWITCHING-SET-ASSIGNMENT parameter to assign the track to a switching set.<a href="#section-4-3.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-3-3.2">
-          <p id="section-3-3.2.1">SUBSCRIBE_TRACKS: - the subscriber sends a SUBSCRIBE_TRACKS message. For each matching
+        <li class="normal" id="section-4-3.2">
+          <p id="section-4-3.2.1">SUBSCRIBE_TRACKS: - the subscriber sends a SUBSCRIBE_TRACKS message. For each matching
 track, the relay will issue a PUBLISH message. The subscriber assigns tracks to switching sets
-by appending the SWITCHING-SET-ASSIGNMENT parameter to the PUBLISH_OK message.<a href="#section-3-3.2.1" class="pilcrow">¶</a></p>
+by appending the SWITCHING-SET-ASSIGNMENT parameter to the PUBLISH_OK message.<a href="#section-4-3.2.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-3-3.3">
-          <p id="section-3-3.3.1">PUBLISH: - the publisher sends a PUBLISH message. The subscriber assigns tracks to switching sets
-by appending the SWITCHING-SET-ASSIGNMENT parameter to the PUBLISH_OK message.<a href="#section-3-3.3.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-4-3.3">
+          <p id="section-4-3.3.1">PUBLISH: - the publisher sends a PUBLISH message. The subscriber assigns tracks to switching sets
+by appending the SWITCHING-SET-ASSIGNMENT parameter to the PUBLISH_OK message.<a href="#section-4-3.3.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-<p id="section-3-4">In all cases, tracks are grouped into a switching set by specifying the same switching set ID.<a href="#section-3-4" class="pilcrow">¶</a></p>
+<p id="section-4-4">In all cases, tracks are grouped into a switching set by specifying the same switching set ID.<a href="#section-4-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="switching-set-assignment-param">
-<section id="section-4">
+<section id="section-5">
       <h2 id="name-switching_set_assignment-pa">
-<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-switching_set_assignment-pa" class="section-name selfRef">SWITCHING_SET_ASSIGNMENT Parameter</a>
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-switching_set_assignment-pa" class="section-name selfRef">SWITCHING_SET_ASSIGNMENT Parameter</a>
       </h2>
-<p id="section-4-1">The SWITCHING-SET-ASSIGNMENT parameter (Parameter Type 0x41) <span class="bcp14">MAY</span> appear in a SUBSCRIBE,
+<p id="section-5-1">The SWITCHING-SET-ASSIGNMENT parameter (Parameter Type 0x41) <span class="bcp14">MAY</span> appear in a SUBSCRIBE,
 REQUEST_UPDATE, or PUBLISH_OK message. This parameter assigns a subscription to a SSTS
 switching set and specifies the algorithm to be used for switching. Each algorithm <span class="bcp14">MAY</span>
-extend the serialization to pass additional fields.<a href="#section-4-1" class="pilcrow">¶</a></p>
-<div class="alignLeft art-text artwork" id="section-4-2">
+extend the serialization to pass additional fields.<a href="#section-5-1" class="pilcrow">¶</a></p>
+<div class="alignLeft art-text artwork" id="section-5-2">
 <pre>
 SWITCHING-SET-ASSIGNMENT {
   Switching set ID (vi64),
   Algorithm (vi64)
 }
-</pre><a href="#section-4-2" class="pilcrow">¶</a>
+</pre><a href="#section-5-2" class="pilcrow">¶</a>
 </div>
 <ul class="normal">
-<li class="normal" id="section-4-3.1">
-          <p id="section-4-3.1.1">Switching set ID: Integer identifying the switching set. A track <span class="bcp14">MUST</span> only be assigned
+<li class="normal" id="section-5-3.1">
+          <p id="section-5-3.1.1">Switching set ID: Integer identifying the switching set. A track <span class="bcp14">MUST</span> only be assigned
 to one switching set at a time. If a subscription attempts to assign a track that is
 already assigned to a different switching set, the relay <span class="bcp14">MUST</span> reject the subscription
-with a Parameter Error.<a href="#section-4-3.1.1" class="pilcrow">¶</a></p>
+with a Parameter Error.<a href="#section-5-3.1.1" class="pilcrow">¶</a></p>
 </li>
-        <li class="normal" id="section-4-3.2">
-          <p id="section-4-3.2.1">Algorithm: integer identifying the SSTS algorithm to be used.<a href="#section-4-3.2.1" class="pilcrow">¶</a></p>
+        <li class="normal" id="section-5-3.2">
+          <p id="section-5-3.2.1">Algorithm: integer identifying the SSTS algorithm to be used.<a href="#section-5-3.2.1" class="pilcrow">¶</a></p>
 </li>
       </ul>
-</section>
-</div>
-<div id="ssts-algorithms">
-<section id="section-5">
-      <h2 id="name-ssts_algorithms">
-<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-ssts_algorithms" class="section-name selfRef">SSTS_ALGORITHMS</a>
-      </h2>
-<p id="section-5-1">The SSTS_ALGORITHMS option (Option Type 0x09) communicates the list of SSTS
-algorithms which the relay supports. Supported algorithms are serialized as
-a sequence of varints. Returning an empty sequence is acceptable and indicates
-that SSTS is not supported. Algorithms are registered in the SSTS-Algorithms
-<a href="#iana-ssts-algorithms" class="auto internal xref">Section 8.1</a> registry.<a href="#section-5-1" class="pilcrow">¶</a></p>
-<p id="section-5-2">The default value is any empty list which prohibits the use of SSTS.<a href="#section-5-2" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="default-switching-algorithm">
@@ -1344,7 +1361,7 @@ that SSTS is not supported. Algorithms are registered in the SSTS-Algorithms
 <a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-switching-set-assignment-fi" class="section-name selfRef">SWITCHING-SET-ASSIGNMENT fields</a>
         </h3>
 <p id="section-6.1-1">This algorithm extends the base definition of the SWITCHING-SET-ASSIGNMENT parameter
-<a href="#switching-set-assignment-param" class="auto internal xref">Section 4</a> to add the following fields:<a href="#section-6.1-1" class="pilcrow">¶</a></p>
+<a href="#switching-set-assignment-param" class="auto internal xref">Section 5</a> to add the following fields:<a href="#section-6.1-1" class="pilcrow">¶</a></p>
 <p id="section-6.1-2">SWITCHING-SET-ASSIGNMENT {
   Switching set ID (vi64),
   Algorithm ID (vi64),
@@ -1468,11 +1485,11 @@ is not defined by this algorithm and might vary between implementations.<a href=
 </li>
             <li class="normal" id="section-6.3.1-2.3">
               <p id="section-6.3.1-2.3.1">'set.weight': for each switching set, the switching set weight, as defined by the set
-throughput weight of the SWITCHING-SET-ASSIGNMENT <a href="#switching-set-assignment-param" class="auto internal xref">Section 4</a> parameter.<a href="#section-6.3.1-2.3.1" class="pilcrow">¶</a></p>
+throughput weight of the SWITCHING-SET-ASSIGNMENT <a href="#switching-set-assignment-param" class="auto internal xref">Section 5</a> parameter.<a href="#section-6.3.1-2.3.1" class="pilcrow">¶</a></p>
 </li>
             <li class="normal" id="section-6.3.1-2.4">
               <p id="section-6.3.1-2.4.1">'set.rank': for each switching set, the switching set rank, as defined by the set
-rank field of the SWITCHING-SET-ASSIGNMENT <a href="#switching-set-assignment-param" class="auto internal xref">Section 4</a> parameter.<a href="#section-6.3.1-2.4.1" class="pilcrow">¶</a></p>
+rank field of the SWITCHING-SET-ASSIGNMENT <a href="#switching-set-assignment-param" class="auto internal xref">Section 5</a> parameter.<a href="#section-6.3.1-2.4.1" class="pilcrow">¶</a></p>
 </li>
           </ul>
 <p id="section-6.3.1-3">On a periodic update interval or at a minimum when an object is received/published on a group
@@ -1512,15 +1529,44 @@ lower-priority sets receive less than their target or nothing.<a href="#section-
       <h2 id="name-iana-considerations">
 <a href="#section-8" class="section-number selfRef">8. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
       </h2>
-<div id="iana-ssts-algorithms">
+<div id="sstsalgorithms-setup-option">
 <section id="section-8.1">
-        <h3 id="name-ssts-algorithms">
-<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-ssts-algorithms" class="section-name selfRef">SSTS-Algorithms</a>
+        <h3 id="name-ssts_algorithms-setup-optio">
+<a href="#section-8.1" class="section-number selfRef">8.1. </a><a href="#name-ssts_algorithms-setup-optio" class="section-name selfRef">SSTS_ALGORITHMS Setup Option</a>
         </h3>
-<p id="section-8.1-1">This document establishes a registry for SSTS algorithms. The
-registration policy is Specification Required (per <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>], <a href="https://rfc-editor.org/rfc/rfc8126#section-4.6" class="relref">Section 4.6</a></span>).<a href="#section-8.1-1" class="pilcrow">¶</a></p>
+<p id="section-8.1-1">IANA is requested to add the following entry to the "Setup Options"
+registry (Section 15.4 of <span>[<a href="#MOQT" class="cite xref">MOQT</a>]</span>):<a href="#section-8.1-1" class="pilcrow">¶</a></p>
 <table class="center" id="table-1">
           <caption><a href="#table-1" class="selfRef">Table 1</a></caption>
+<thead>
+            <tr>
+              <th class="text-left" rowspan="1" colspan="1">Type</th>
+              <th class="text-left" rowspan="1" colspan="1">Name</th>
+              <th class="text-left" rowspan="1" colspan="1">Specification</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-left" rowspan="1" colspan="1">TBD1</td>
+              <td class="text-left" rowspan="1" colspan="1">SSTS_ALGORITHMS</td>
+              <td class="text-left" rowspan="1" colspan="1">This document</td>
+            </tr>
+          </tbody>
+        </table>
+<p id="section-8.1-3">SSTS_ALGORITHMS is a Setup Option (see <a href="#ssts-algorithms" class="auto internal xref">Section 3.1</a>)
+that an endpoint includes in its SETUP message to indicate support for the
+SSTS extension defined in this document.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="iana-ssts-algorithms">
+<section id="section-8.2">
+        <h3 id="name-ssts-algorithms">
+<a href="#section-8.2" class="section-number selfRef">8.2. </a><a href="#name-ssts-algorithms" class="section-name selfRef">SSTS-Algorithms</a>
+        </h3>
+<p id="section-8.2-1">This document establishes a registry for SSTS algorithms. The
+registration policy is Specification Required (per <span>[<a href="#RFC8126" class="cite xref">RFC8126</a>], <a href="https://rfc-editor.org/rfc/rfc8126#section-4.6" class="relref">Section 4.6</a></span>).<a href="#section-8.2-1" class="pilcrow">¶</a></p>
+<table class="center" id="table-2">
+          <caption><a href="#table-2" class="selfRef">Table 2</a></caption>
 <thead>
             <tr>
               <th class="text-right" rowspan="1" colspan="1">Type</th>
@@ -1536,7 +1582,7 @@ registration policy is Specification Required (per <span>[<a href="#RFC8126" cla
             </tr>
           </tbody>
         </table>
-<p id="section-8.1-3">TODO acknowledge.<a href="#section-8.1-3" class="pilcrow">¶</a></p>
+<p id="section-8.2-3">TODO acknowledge.<a href="#section-8.2-3" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
