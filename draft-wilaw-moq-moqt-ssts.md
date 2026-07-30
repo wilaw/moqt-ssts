@@ -21,7 +21,7 @@ venue:
   mail: "moq@ietf.org"
 
 author:
-  - fullname: Will Law
+  - name: Will Law
     organization: Akamai
     email: "wilaw@akamai.com"
   - name: Ian Swett
@@ -49,8 +49,6 @@ author:
 normative:
   MOQT: I-D.draft-ietf-moq-transport-19
 
-informative:
-
 --- abstract
 
 This draft defines an extension to MOQT to enable Sender-Side Track Switching.
@@ -63,13 +61,13 @@ This draft defines an extension to MOQT to enable Sender-Side Track Switching.
 Sender Side Track Switching (SSTS) is a subscriber-initiated and controlled behavior in which
 a publisher dynamically selects which track to forward from a switching set based on
 various algorithms. Each algorithm defines a set of attributes which are passed in the
-SWITCHING-SET-ASSIGNMENT parameter {{switching-set-assignment-param}} along with a
+SWITCHING_SET_ASSIGNMENT parameter {{switching-set-assignment-param}} along with a
 complimentary set of rules for subscriber behavior and relay behavior.
 
 This specification defines a default algorithm - type 0. Other algorithms are referenced in the
-"SSTS Algorithms" registry {{iana-ssts-algorithms}}.
+"SSTS Algorithms" registry ({{iana-ssts-algorithms}}).
 
-SSTS is implemented as a MOQT Extension(See {{MOQT}} Sect 3.2).
+SSTS is implemented as a MOQT Extension (See {{MOQT}} Sect 3.2).
 
 # Conventions and Definitions
 
@@ -84,11 +82,11 @@ The absence of the SSTS_ALGORITHMS setup option, or an SSTS_ALGORITHMS setup opt
 with an empty list, prohibits the use of SSTS.
 
 ## SSTS_ALGORITHMS {#ssts-algorithms}
-The SSTS_ALGORITHMS option (Option Type 0x09) communicates the list of SSTS
-algorithms which the relay supports. Supported algorithms are serialized as
-a sequence of varints. Returning an empty sequence is acceptable and indicates
-that SSTS is not supported. Algorithms are registered in the SSTS-Algorithms
-{{iana-ssts-algorithms}} registry.
+This specification defines a new MOQT Setup Option called SSTS_ALGORITHMS. The SSTS_ALGORITHMS
+option (Option Type 0x09) communicates the list of SSTS algorithms which the endpoint supports.
+Supported algorithms are serialized as a sequence of varints. Returning an empty sequence is
+acceptable and indicates that SSTS is not supported. Algorithms are registered in the SSTS-Algorithms
+registry (see {{iana-ssts-algorithms}}).
 
 # General behaviors for all SSTS algorithms {#ssts-general-requirements}
 
@@ -102,29 +100,31 @@ selects exactly one track per switching set to forward at any given time.
 Subscribers can create switching sets through three methods. All support single or multiple
 switching sets and result in identical relay behavior:
 
-* Individual SUBSCRIBE: - the subscriber sends a separate SUBSCRIBE message for each track,
-  and appends the SWITCHING-SET-ASSIGNMENT parameter to assign the track to a switching set.
+* Individual SUBSCRIBE: the subscriber sends a separate SUBSCRIBE message for each track,
+  and appends the SWITCHING_SET_ASSIGNMENT parameter to assign the track to a switching set.
 
-* SUBSCRIBE_TRACKS: - the subscriber sends a SUBSCRIBE_TRACKS message. For each matching
+* SUBSCRIBE_TRACKS: the subscriber sends a SUBSCRIBE_TRACKS message. For each matching
   track, the relay will issue a PUBLISH message. The subscriber assigns tracks to switching sets
-  by appending the SWITCHING-SET-ASSIGNMENT parameter to the PUBLISH_OK message.
+  by appending the SWITCHING_SET_ASSIGNMENT parameter to the PUBLISH_OK message.
 
-* PUBLISH: - the publisher sends a PUBLISH message. The subscriber assigns tracks to switching sets
-  by appending the SWITCHING-SET-ASSIGNMENT parameter to the PUBLISH_OK message.
+* PUBLISH: the publisher sends a PUBLISH message. The subscriber assigns tracks to switching sets
+  by appending the SWITCHING_SET_ASSIGNMENT parameter to the PUBLISH_OK message.
 
 In all cases, tracks are grouped into a switching set by specifying the same switching set ID.
 
 # SWITCHING_SET_ASSIGNMENT Parameter {#switching-set-assignment-param}
 
-The SWITCHING-SET-ASSIGNMENT parameter (Parameter Type 0x41) MAY appear in a SUBSCRIBE,
+This extension defines a new MOQT Parameter named SWITCHING_SET_ASSIGNMENT.
+
+The SWITCHING_SET_ASSIGNMENT parameter (Parameter Type 0x41) MAY appear in a SUBSCRIBE,
 REQUEST_UPDATE, or PUBLISH_OK message. This parameter assigns a subscription to a SSTS
 switching set and specifies the algorithm to be used for switching. Each algorithm MAY
 extend the serialization to pass additional fields.
 
 ~~~
-SWITCHING-SET-ASSIGNMENT {
+SWITCHING_SET_ASSIGNMENT {
   Switching set ID (vi64),
-  Algorithm (vi64)
+  Algorithm ID (vi64)
 }
 ~~~
 
@@ -132,18 +132,19 @@ SWITCHING-SET-ASSIGNMENT {
   to one switching set at a time. If a subscription attempts to assign a track that is
   already assigned to a different switching set, the relay MUST reject the subscription
   with a Parameter Error.
-* Algorithm: integer identifying the SSTS algorithm to be used.
+* Algorithm ID: integer identifying the SSTS algorithm to be used.
 
 
 # Default switching algorithm
 
 This specification defines a default SSTS algorithm with a type of 0.
 
-## SWITCHING-SET-ASSIGNMENT fields
-This algorithm extends the base definition of the SWITCHING-SET-ASSIGNMENT parameter
+## SWITCHING_SET_ASSIGNMENT fields
+This algorithm extends the base definition of the SWITCHING_SET_ASSIGNMENT parameter
 {{switching-set-assignment-param}} to add the following fields:
 
-SWITCHING-SET-ASSIGNMENT {
+~~~
+SWITCHING_SET_ASSIGNMENT {
   Switching set ID (vi64),
   Algorithm ID (vi64),
   Throughput threshold (vi64),
@@ -151,6 +152,7 @@ SWITCHING-SET-ASSIGNMENT {
   Activate switching (vi64),
   Set rank (8)
 }
+~~~
 
 * Throughput threshold: Minimum throughput (kbps) required to select this track.
 
@@ -185,31 +187,31 @@ switching set.
 
 To modify an established switching set, the subscriber can
 
-* Add a track to an existing set: send SUBSCRIBE or PUBLISH_OK with a SWITCHING-SET-ASSIGNMENT parameter
+* Add a track to an existing set: send SUBSCRIBE or PUBLISH_OK with a SWITCHING_SET_ASSIGNMENT parameter
   referencing an existing set.
 * Remove a track from a set: unsubscribe from that track.
-* Pause SSTS: Send REQUEST_UPDATE for any track assigned to that set with a SWITCHING-SET-ASSIGNMENT
+* Pause SSTS: Send REQUEST_UPDATE for any track assigned to that set with a SWITCHING_SET_ASSIGNMENT
   parameter defining activate = 0.
-* Resume SSTS: Send REQUEST_UPDATE for any track assigned to that set with a SWITCHING-SET-ASSIGNMENT
+* Resume SSTS: Send REQUEST_UPDATE for any track assigned to that set with a SWITCHING_SET_ASSIGNMENT
   parameter defining activate switching = N, where N is the number of tracks assigned to that switching set.
 
 ## Publisher behavior
 
-When the publisher receives a subscription with SWITCHING-SET-ASSIGNMENT:
+When the publisher receives a subscription with SWITCHING_SET_ASSIGNMENT:
 
 1. Add the subscription to the specified switching set, creating the set if needed.
 2. Set Forward state to 0 for the new subscription, irrespective of the forward state received from the
    SUBSCRIBE or PUBLISH_OK.
-4. Store 'throughput threshold' as a property of the subscription.
-5. Store 'Set throughput weight', 'Set rank' and 'Activate switching' as properties of the set.
-6. If the number of tracks assigned to the set with active subscriptions >= the activate switching value,
+3. Store 'throughput threshold' as a property of the subscription.
+4. Store 'Set throughput weight', 'Set rank' and 'Activate switching' as properties of the set.
+5. If the number of tracks assigned to the set with active subscriptions >= the activate switching value,
    then begin active track selection by applying the bandwidth allocation algorithm {{allocation-algorithm}}
    when an Object is received or published on a Group larger than previously largest Group.
 
 If the publisher receives a PUBLISH_DONE message, or an UNSUBSCRIBE for a subscription that was
-previously added to a switching set, then it must remove that subscription from the switching set
+previously added to a switching set, then it MUST remove that subscription from the switching set
 and continue to process the switching across the remaining subscriptions within that set. The value of
-'activate switching' MUST be decremented by one to enable the swictching to remain active.
+'activate switching' MUST be decremented by one to enable the switching to remain active.
 
 If all tracks are removed from a previously established switching set, then that set is
 considered deleted and is removed from the bandwidth allocation algorithm.
@@ -230,9 +232,9 @@ The publisher maintains:
   is not defined by this algorithm and might vary between implementations.
 - `sum_W`: Sum of all set weights updated incrementally as subscriptions are added or removed
 - 'set.weight': for each switching set, the switching set weight, as defined by the set
-  throughput weight of the SWITCHING-SET-ASSIGNMENT {{switching-set-assignment-param}} parameter.
+  throughput weight of the SWITCHING_SET_ASSIGNMENT {{switching-set-assignment-param}} parameter.
 - 'set.rank': for each switching set, the switching set rank, as defined by the set
-  rank field of the SWITCHING-SET-ASSIGNMENT {{switching-set-assignment-param}} parameter.
+  rank field of the SWITCHING_SET_ASSIGNMENT {{switching-set-assignment-param}} parameter.
 
 On a periodic update interval or at a minimum when an object is received/published on a group
 larger than previously largest group, the relay executes the following algorithm:
@@ -267,11 +269,24 @@ registry (Section 15.4 of {{MOQT}}):
 
 | Type | Name                   | Specification  |
 |------|------------------------|----------------|
-| TBD1 | SSTS_ALGORITHMS  | This document  |
+| 0x09 | SSTS_ALGORITHMS  | This document  |
 
-SSTS_ALGORITHMS is a Setup Option (see {{ssts-algorithms}})
-that an endpoint includes in its SETUP message to indicate support for the
+SSTS_ALGORITHMS is a Setup Option (see {{ssts-algorithms}}) that an
+endpoint includes in its SETUP message to indicate support for the
 SSTS extension defined in this document.
+
+## SWITCHING_SET_ASSIGNMENT Parameter
+
+IANA is requested to add the following entry to the "Message Parameters"
+registry (Section 15.7 of {{MOQT}}):
+
+| Parameter Type | Parameter Name  | Specification  |
+|------|------------------------|----------------|
+| 0x41 | SWITCHING_SET_ASSIGNMENT  | This document  |
+
+SWITCHING_SET_ASSIGNMENT is a Parameter (see {{switching-set-assignment-param}})
+that assigns a subscription to a switching set, defines the switching algorithm
+to be used and passes optional parameters as required by the algorithm.
 
 ## SSTS-Algorithms {#iana-ssts-algorithms}
 
@@ -281,9 +296,11 @@ Section 4.6}}).
 
 | Type | Name       | Specification |
 |-----:|:-----------|:--------------|
-| 0x0  | Default  | this |
+| 0x0  | Default  | This document  |
 
 
 
 
-TODO acknowledge.
+# Acknowledgments
+
+IETF moq working group. 
