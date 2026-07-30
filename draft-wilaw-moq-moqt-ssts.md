@@ -256,34 +256,17 @@ TBD
 
 # IANA Considerations
 
-This document requests that IANA add two new entries to registries defined
-in {{MOQT}}.
+## SSTS-Algorithms {#iana-ssts-algorithms}
 
-## FETCH_PACING_SUPPORTED Setup Option
+This document establishes a registry for SSTS algorithms. The
+registration policy is Specification Required (per {{!RFC8126,
+Section 4.6}}).
 
-IANA is requested to add the following entry to the "Setup Options"
-registry (Section 15.4 of {{MOQT}}):
+| Type | Name       | Specification |
+|-----:|:-----------|:--------------|
+| 0x0  | Default  | this |
+| 0x7f * N + 0x9D | Reserved for greasing | {{grease}} |
 
-| Type | Name                   | Specification  |
-|------|------------------------|----------------|
-| TBD1 | FETCH_PACING_SUPPORTED | This document  |
 
-FETCH_PACING_SUPPORTED is a boolean Setup Option (see )
-that an endpoint includes in its SETUP message to indicate support for the
-FETCH Pacing extension defined in this document.
-
-## PACING_RATE Message Parameter
-
-IANA is requested to add the following entry to the "Message Parameters"
-registry (Section 15.7 of {{MOQT}}):
-
-| Parameter Type | Parameter Name | Specification  |
-|----------------|----------------|----------------|
-| TBD2           | PACING_RATE    | This document  |
-
-PACING_RATE is a Message Parameter (see ) that a
-client includes in a FETCH message to activate pacing for that request,
-once FETCH_PACING_SUPPORTED has been successfully negotiated per Section 3.2 of
-{{MOQT}}.
 
 TODO acknowledge.
