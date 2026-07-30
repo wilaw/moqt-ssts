@@ -265,7 +265,7 @@ Section 4.6}}).
 | Type | Name       | Specification |
 |-----:|:-----------|:--------------|
 | 0x0  | Default  | this |
-| 0x7f * N + 0x9D | Reserved for greasing | {{grease}} |
+
 
 
 
