@@ -303,4 +303,4 @@ Section 4.6}}).
 
 # Acknowledgments
 
-IETF moq working group. 
+IETF moq working group.
