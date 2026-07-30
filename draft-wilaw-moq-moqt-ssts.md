@@ -4,7 +4,7 @@ abbrev: "SSTS"
 category: std
 
 docname: draft-wilaw-moq-moqt-ssts-latest
-submissiontype: IETF 
+submissiontype: IETF
 number:
 date:
 consensus: true
