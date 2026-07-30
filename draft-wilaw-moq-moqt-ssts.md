@@ -69,7 +69,7 @@ complimentary set of rules for subscriber behavior and relay behavior.
 This specification defines a default algorithm - type 0. Other algorithms are referenced in the
 "SSTS Algorithms" registry {{iana-ssts-algorithms}}.
 
-SSTS is implemented as a MOQT Extension(See {{MOQT}} Sect 3.2). 
+SSTS is implemented as a MOQT Extension(See {{MOQT}} Sect 3.2).
 
 # Conventions and Definitions
 
@@ -269,7 +269,7 @@ registry (Section 15.4 of {{MOQT}}):
 |------|------------------------|----------------|
 | TBD1 | SSTS_ALGORITHMS  | This document  |
 
-SSTS_ALGORITHMS is a Setup Option (see {{fetch-pacing-setup-extension}})
+SSTS_ALGORITHMS is a Setup Option (see {{ssts-algorithms}})
 that an endpoint includes in its SETUP message to indicate support for the
 SSTS extension defined in this document.
 
