@@ -157,13 +157,12 @@ SWITCHING_SET_ASSIGNMENT {
 * Throughput threshold: Minimum throughput (kbps) required to select this track.
 
 * Set throughput weight: Relative weight for bandwidth allocation, expressed as an
-  integer 1 <= N <= 10. Each set receives bandwidth proportional to its weight:
-  `target = B_total × weight / sum_F`. These are relative weights, not absolute
-  percentages; for example, weights of 6, 4, 3 (sum = 13) allocate 46%, 31%, 23%
-  respectively. This allows sets to be added or removed without requiring other sets to
-  update their weights. When multiple subscriptions in the same switching set specify
-  different weight values, the publisher MUST use the value from the most recently received
-  message for that set.
+  integer 1 <= N <= 10. Each set receives bandwidth proportional to its weight. These
+  are relative weights, not absolute percentages; for example, weights of 6, 4, 3 (sum = 13)
+  allocate 46%, 31%, 23% respectively. This allows sets to be added or removed without
+  requiring other sets to update their weights. When multiple subscriptions in the same
+  switching set specify different weight values, the publisher MUST use the value from
+  the most recently received message for that set.
 
 * Activate switching: Integer, when set to 0, pauses SSTS switching for this set. When set
   to N, the relay activates or resumes switching as soon as the number of tracks assigned to
