@@ -1,0 +1,228 @@
+{
+  "magic": "E!vIA5L86J2I",
+  "timestamp": "2026-08-02T03:16:21.049809+00:00",
+  "repo": "wilaw/moqt-ssts",
+  "labels": [
+    {
+      "name": "bug",
+      "description": "Something isn't working",
+      "color": "d73a4a"
+    },
+    {
+      "name": "documentation",
+      "description": "Improvements or additions to documentation",
+      "color": "0075ca"
+    },
+    {
+      "name": "duplicate",
+      "description": "This issue or pull request already exists",
+      "color": "cfd3d7"
+    },
+    {
+      "name": "enhancement",
+      "description": "New feature or request",
+      "color": "a2eeef"
+    },
+    {
+      "name": "good first issue",
+      "description": "Good for newcomers",
+      "color": "7057ff"
+    },
+    {
+      "name": "help wanted",
+      "description": "Extra attention is needed",
+      "color": "008672"
+    },
+    {
+      "name": "invalid",
+      "description": "This doesn't seem right",
+      "color": "e4e669"
+    },
+    {
+      "name": "question",
+      "description": "Further information is requested",
+      "color": "d876e3"
+    },
+    {
+      "name": "wontfix",
+      "description": "This will not be worked on",
+      "color": "ffffff"
+    }
+  ],
+  "issues": [],
+  "pulls": [
+    {
+      "number": 1,
+      "id": "PR_kwDOToLYrc74f5aP",
+      "title": "Add Sender-Side Track Switching extension to MOQT",
+      "url": "https://github.com/wilaw/moqt-ssts/pull/1",
+      "state": "MERGED",
+      "author": "wilaw",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "This draft defines an extension to MOQT to enable Sender-Side Track Switching (SSTS), detailing algorithms and subscriber behavior for track selection.",
+      "createdAt": "2026-07-30T11:55:58Z",
+      "updatedAt": "2026-07-30T12:18:37Z",
+      "baseRepository": "wilaw/moqt-ssts",
+      "baseRefName": "main",
+      "baseRefOid": "cff2648b8008523ebd8cb9e28b820b674343e188",
+      "headRepository": "wilaw/moqt-ssts",
+      "headRefName": "wilaw-patch-1",
+      "headRefOid": "8a9898e5b1d14078e08e6ef91b5c3ac1a387a437",
+      "closedAt": "2026-07-30T12:18:37Z",
+      "mergedAt": "2026-07-30T12:18:37Z",
+      "mergedBy": "wilaw",
+      "mergeCommit": {
+        "oid": "45156c86393258241bc27ae783fa4a053c0fed67"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOToLYrc8AAAABHzQUpA",
+          "commit": {
+            "abbreviatedOid": "9e0db67"
+          },
+          "author": "github-actions",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-07-30T11:56:29Z",
+          "updatedAt": "2026-07-30T11:56:29Z",
+          "comments": [
+            {
+              "originalPosition": 7,
+              "body": "````suggestion\nsubmissiontype: IETF\n````",
+              "createdAt": "2026-07-30T11:56:29Z",
+              "updatedAt": "2026-07-30T11:56:29Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 2,
+      "id": "PR_kwDOToLYrc74h2Eo",
+      "title": "Enhance SSTS_ALGORITHMS section and remove redundancy",
+      "url": "https://github.com/wilaw/moqt-ssts/pull/2",
+      "state": "MERGED",
+      "author": "wilaw",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "Added details about SSTS_ALGORITHMS setup option and its implications during MOQT SETUP. Removed redundant section on SSTS_ALGORITHMS.",
+      "createdAt": "2026-07-30T13:07:34Z",
+      "updatedAt": "2026-07-30T13:12:26Z",
+      "baseRepository": "wilaw/moqt-ssts",
+      "baseRefName": "main",
+      "baseRefOid": "6cb2893509c354e0bf9b6a13fe9f85da5c12b682",
+      "headRepository": "wilaw/moqt-ssts",
+      "headRefName": "wilaw-patch-2",
+      "headRefOid": "a886c33837a714b5087ec532a519345876fd588e",
+      "closedAt": "2026-07-30T13:12:22Z",
+      "mergedAt": "2026-07-30T13:12:22Z",
+      "mergedBy": "wilaw",
+      "mergeCommit": {
+        "oid": "552d226f30451d56fae2027732ce6718911bcbb7"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOToLYrc8AAAABHzz7tw",
+          "commit": {
+            "abbreviatedOid": "3ba8546"
+          },
+          "author": "github-actions",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-07-30T13:08:04Z",
+          "updatedAt": "2026-07-30T13:08:04Z",
+          "comments": [
+            {
+              "originalPosition": 6,
+              "body": "````suggestion\nSSTS is implemented as a MOQT Extension(See {{MOQT}} Sect 3.2).\n````",
+              "createdAt": "2026-07-30T13:08:04Z",
+              "updatedAt": "2026-07-30T13:08:04Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 3,
+      "id": "PR_kwDOToLYrc74jys6",
+      "title": "Fix formatting and parameter naming in draft",
+      "url": "https://github.com/wilaw/moqt-ssts/pull/3",
+      "state": "MERGED",
+      "author": "wilaw",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-07-30T14:13:01Z",
+      "updatedAt": "2026-07-30T14:15:02Z",
+      "baseRepository": "wilaw/moqt-ssts",
+      "baseRefName": "main",
+      "baseRefOid": "552d226f30451d56fae2027732ce6718911bcbb7",
+      "headRepository": "wilaw/moqt-ssts",
+      "headRefName": "wilaw-patch-2",
+      "headRefOid": "2754b8853688fb1d7d924d415fc5d2893f46a69d",
+      "closedAt": "2026-07-30T14:14:59Z",
+      "mergedAt": "2026-07-30T14:14:59Z",
+      "mergedBy": "wilaw",
+      "mergeCommit": {
+        "oid": "66254c12f84713c9fd1df0c8e94216975f03e220"
+      },
+      "comments": [],
+      "reviews": [
+        {
+          "id": "PRR_kwDOToLYrc8AAAABH0aOEg",
+          "commit": {
+            "abbreviatedOid": "52ba761"
+          },
+          "author": "github-actions",
+          "authorAssociation": "CONTRIBUTOR",
+          "state": "COMMENTED",
+          "body": "",
+          "createdAt": "2026-07-30T14:13:27Z",
+          "updatedAt": "2026-07-30T14:13:28Z",
+          "comments": [
+            {
+              "originalPosition": 220,
+              "body": "````suggestion\nIETF moq working group.\n````",
+              "createdAt": "2026-07-30T14:13:28Z",
+              "updatedAt": "2026-07-30T14:13:28Z"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "number": 4,
+      "id": "PR_kwDOToLYrc74-x_y",
+      "title": "Refactor bandwidth allocation explanation for clarity",
+      "url": "https://github.com/wilaw/moqt-ssts/pull/4",
+      "state": "OPEN",
+      "author": "wilaw",
+      "authorAssociation": "OWNER",
+      "assignees": [],
+      "labels": [],
+      "body": "",
+      "createdAt": "2026-07-31T11:08:28Z",
+      "updatedAt": "2026-07-31T11:08:28Z",
+      "baseRepository": "wilaw/moqt-ssts",
+      "baseRefName": "main",
+      "baseRefOid": "66254c12f84713c9fd1df0c8e94216975f03e220",
+      "headRepository": "wilaw/moqt-ssts",
+      "headRefName": "wilaw-patch-2",
+      "headRefOid": "0fabc9c3e49781b52635fac287177e994fff25cb",
+      "closedAt": null,
+      "mergedAt": null,
+      "mergedBy": null,
+      "mergeCommit": null,
+      "comments": [],
+      "reviews": []
+    }
+  ]
+}
