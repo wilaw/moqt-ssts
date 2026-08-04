@@ -62,7 +62,7 @@ Sender Side Track Switching (SSTS) is a subscriber-initiated and controlled beha
 a publisher dynamically selects which track to forward from a switching set based on
 various algorithms. Each algorithm defines a set of attributes which are passed in the
 SWITCHING_SET_ASSIGNMENT parameter {{switching-set-assignment-param}} along with a
-complimentary set of rules for subscriber behavior and relay behavior.
+complimentary set of rules for subscriber behavior and publisher behavior.
 
 This specification defines a default algorithm - type 0. Other algorithms are referenced in the
 "SSTS Algorithms" registry ({{iana-ssts-algorithms}}).
@@ -93,18 +93,18 @@ registry (see {{iana-ssts-algorithms}}).
 The subscriber is responsible for grouping tracks into switching sets based on application-level
 knowledge. A switching set is a collection of tracks representing the same content encoded at
 different throughput levels, typically from a single source. Tracks within a switching set are
-time-aligned at certain group boundaries, allowing the relay to switch between tracks at these
-boundaries while ensuring the subscriber receives uninterrupted content from the set. The relay
+time-aligned at certain group boundaries, allowing the publisher to switch between tracks at these
+boundaries while ensuring the subscriber receives uninterrupted content from the set. The publisher
 selects exactly one track per switching set to forward at any given time.
 
 Subscribers can create switching sets through three methods. All support single or multiple
-switching sets and result in identical relay behavior:
+switching sets and result in identical publisher behavior:
 
 * Individual SUBSCRIBE: the subscriber sends a separate SUBSCRIBE message for each track,
   and appends the SWITCHING_SET_ASSIGNMENT parameter to assign the track to a switching set.
 
 * SUBSCRIBE_TRACKS: the subscriber sends a SUBSCRIBE_TRACKS message. For each matching
-  track, the relay will issue a PUBLISH message. The subscriber assigns tracks to switching sets
+  track, the publisher will issue a PUBLISH message. The subscriber assigns tracks to switching sets
   by appending the SWITCHING_SET_ASSIGNMENT parameter to the PUBLISH_OK message.
 
 * PUBLISH: the publisher sends a PUBLISH message. The subscriber assigns tracks to switching sets
@@ -130,7 +130,7 @@ SWITCHING_SET_ASSIGNMENT {
 
 * Switching set ID: Integer identifying the switching set. A track MUST only be assigned
   to one switching set at a time. If a subscription attempts to assign a track that is
-  already assigned to a different switching set, the relay MUST reject the subscription
+  already assigned to a different switching set, the publisher MUST reject the subscription
   with a Parameter Error.
 * Algorithm ID: integer identifying the SSTS algorithm to be used.
 
@@ -156,18 +156,20 @@ SWITCHING_SET_ASSIGNMENT {
 
 * Throughput threshold: Minimum throughput (kbps) required to select this track.
 
-* Set throughput weight: Relative weight for bandwidth allocation, expressed as an
-  integer 1 <= N <= 10. Each set receives bandwidth proportional to its weight:
-  `target = B_total × weight / sum_F`. These are relative weights, not absolute
-  percentages; for example, weights of 6, 4, 3 (sum = 13) allocate 46%, 31%, 23%
-  respectively. This allows sets to be added or removed without requiring other sets to
-  update their weights. When multiple subscriptions in the same switching set specify
-  different weight values, the publisher MUST use the value from the most recently received
-  message for that set.
+* Set throughput weight: Relative weight for bandwidth allocation among switching sets
+  that share the same 'set.rank' value, expressed as an integer 1 <= N <= 10. Sets
+  sharing a rank divide the bandwidth available to that rank tier proportionally to
+  their weight — e.g. weights of 6, 4, 3 (sum = 13) among three same-rank sets allocate
+  46%, 31%, 23% of that tier's available bandwidth, respectively. Weight has no effect
+  across different rank values; a higher-priority set (lower 'set.rank') is served
+  ahead of a lower-priority set regardless of relative weight. See
+  {{allocation-algorithm}} for details. When multiple subscriptions in the same
+  switching set specify different weight values, the publisher MUST use the value from
+  the most recently received message for that set.
 
 * Activate switching: Integer, when set to 0, pauses SSTS switching for this set. When set
-  to N, the relay activates or resumes switching as soon as the number of tracks assigned to
-  the switching set is >= N.  Activation takes effect when an Object is received or published
+  to N, the publisher activates or resumes switching as soon as the number of tracks assigned to
+  the switching set is >= N. Activation takes effect when an Object is received or published
   on a Group larger than previously largest Group. When multiple subscriptions in the same
   switching set specify different activate values, the publisher MUST use the value from the
   most recently received message for that set.
@@ -180,7 +182,7 @@ SWITCHING_SET_ASSIGNMENT {
 
 ## Subscriber behavior
 
-The subscriber follows the general rules {#ssts-general-requirements} for switching set establishment.
+The subscriber follows the general rules {{ssts-general-requirements}} for switching set establishment.
 
 The subscriber sets activate switching = N, where N is the number of tracks that will be assigned to that
 switching set.
@@ -211,7 +213,7 @@ When the publisher receives a subscription with SWITCHING_SET_ASSIGNMENT:
 If the publisher receives a PUBLISH_DONE message, or an UNSUBSCRIBE for a subscription that was
 previously added to a switching set, then it MUST remove that subscription from the switching set
 and continue to process the switching across the remaining subscriptions within that set. The value of
-'activate switching' MUST be decremented by one to enable the switching to remain active.
+'activate switching' MUST be decremented by one, while maintaining a floor of zero.
 
 If all tracks are removed from a previously established switching set, then that set is
 considered deleted and is removed from the bandwidth allocation algorithm.
@@ -222,43 +224,130 @@ irrespective of their downstream forwarding state.
 ### Bandwidth Allocation {#allocation-algorithm}
 
 The publisher maintains:
-
-- `B_total`: Estimated downstream bandwidth capacity for the subscriber connection. The
+- 'B_total': Estimated downstream bandwidth capacity for the subscriber connection in kbps. The
   publisher maintains a bandwidth estimate for each downstream subscriber. The timebase of this
   estimate SHOULD be at least the Group duration of the track, if that is known or can be estimated
   by the publisher, or several seconds if it is unknown. The estimate is obtained
   periodically from the transport stack (e.g., congestion window pacing rate, smoothed RTT)
   and MAY be supplemented by external sources or application-level feedback. The exact mechanism
   is not defined by this algorithm and might vary between implementations.
-- `sum_W`: Sum of all set weights updated incrementally as subscriptions are added or removed
 - 'set.weight': for each switching set, the switching set weight, as defined by the set
   throughput weight of the SWITCHING_SET_ASSIGNMENT {{switching-set-assignment-param}} parameter.
 - 'set.rank': for each switching set, the switching set rank, as defined by the set
   rank field of the SWITCHING_SET_ASSIGNMENT {{switching-set-assignment-param}} parameter.
 
+Switching sets are allocated bandwidth using strict priority: 'set.rank' establishes a total
+order across switching sets, and a switching set MUST receive its full computed allocation
+before any switching set of lower priority (a higher 'set.rank' value) receives any bandwidth.
+'set.weight' only arbitrates between switching sets that share the same 'set.rank' value; it
+has no effect across different rank values.
+
 On a periodic update interval or at a minimum when an object is received/published on a group
-larger than previously largest group, the relay executes the following algorithm:
+larger than previously largest group, the publisher executes the following algorithm:
 
 ~~~
-B_remaining  = B_total
-for each set in ascending set.rank order:
-  set.target = B_remaining × set.weight / sum_W
-  set.allocated = min(set.target, B_remaining)
-  set.selected = track in set with highest throughput_threshold where track.throughput_threshold <= set.allocated
-  B_remaining -= set.selected.throughput_threshold
+B_remaining = B_total
+for each distinct set.rank value r present among active switching sets, in ascending order:
+  active = { switching sets with set.rank == r }
+  tier_pool = B_remaining
+  repeat:
+    sum_W_active = sum of set.weight for set in active
+    for each set in active:
+      set.target = tier_pool × set.weight / sum_W_active
+      set.selected = null
+      if ( set.target >= lowest track.throughput_threshold in set )
+          set.selected = track in set with highest throughput_threshold
+                         where track.throughput_threshold <= set.target
+    saturated = { set in active : set.selected == highest-throughput_threshold
+                                   track available in set }
+    for each set in saturated:
+      tier_pool -= (set.selected != null) ? set.selected.throughput_threshold : 0
+      remove set from active
+  until ( active is empty OR saturated is empty )
+  for each set with set.rank == r:
+    B_remaining -= (set.selected != null) ? set.selected.throughput_threshold : 0
 for each track in a switching set:
   set forward state = (track == set.selected)
 ~~~
 
-The rank ordering ensures higher-priority sets receive their target allocation first; lower-priority sets
-absorb any bandwidth shortfall. When bandwidth is sufficient, all sets receive `allocated = target`.
-When bandwidth is constrained, higher-priority sets (lower rank value) are protected while
-lower-priority sets receive less than their target or nothing.
+A switching set that is the only one at its rank receives up to the entirety of
+'B_remaining' as its target, since 'sum_W_active' reduces to its own weight — this is what
+allows a higher-priority set to consume as much of 'B_total' as it needs, independent of
+weight. A switching set that shares a rank with others initially divides that tier's
+opening bandwidth proportionally by weight.
 
+If a switching set in a tier cannot use its full proportional share — either because it
+has already selected the highest-bitrate track available to it, or because no track in
+the set can make use of the additional bandwidth — the unused portion of its share is
+reallocated among the remaining switching sets in the same tier, recomputed proportionally
+to their weights, and this repeats until every switching set in the tier has either
+selected its highest-available track or the tier's bandwidth is fully claimed. Only
+bandwidth that no switching set in the tier can use at all carries forward, via
+'B_remaining', to the next, lower-priority tier.
+
+Each redistribution round removes at least one switching set from further consideration
+within its tier, or terminates outright; the process therefore converges within at most
+as many rounds as there are switching sets sharing that rank. Since a switching set
+typically contains a small number of tracks, this adds negligible computational cost
+compared to a single-pass allocation.
+
+If the allocated throughput for a set is lower than the lowest throughput threshold of any
+track in that set, then no data from that set is forwarded.
 
 # Security Considerations
+This document relies on the session security properties of {{MOQT}} and does
+not modify MOQT's authentication or authorization model. The risks discussed
+below concern resource exhaustion enabled by an already-authorized subscriber,
+not confidentiality or integrity.
 
-TBD
+## Asymmetric Resource Exhaustion via Switching Set Fan-out
+A subscriber can assign a large number of high-bitrate tracks to a single
+switching set while consuming little or no downstream bandwidth. Because
+publishers SHOULD maintain a forward=1 upstream state on all tracks within a
+switching set irrespective of their downstream forwarding state (see
+{{ssts-general-requirements}}), a publisher can be induced to fetch and cache
+a large volume of upstream content while forwarding little or nothing to the
+subscriber.
+
+This is functionally equivalent to a subscriber issuing individual SUBSCRIBE
+messages with Forward=0 for a large number of tracks, and is therefore a
+pre-existing risk in MOQT rather than one introduced by this extension.
+Switching sets do make the pattern easier to trigger, since a single
+SWITCHING_SET_ASSIGNMENT parameter can fan out to many tracks that a
+publisher must actively fetch upstream. As with the general MOQT case, this
+SHOULD be mitigated by general-purpose protections at the publisher and any
+intermediate nodes performing the switching, such as per-subscriber limits on
+the number and aggregate bitrate of concurrently subscribed tracks, quotas on
+upstream fetch and cache resources, and monitoring for subscribers whose
+upstream resource consumption is disproportionate to their delivered
+downstream rate. This document does not define new protocol mechanisms for
+this purpose.
+
+## Misrepresented Throughput Threshold
+The Throughput Threshold field of the SWITCHING_SET_ASSIGNMENT parameter
+({{switching-set-assignment-param}}) is supplied by the subscriber and is not
+independently verified by the publisher. A subscriber can declare a
+Throughput Threshold far in excess of a track's actual encoded bitrate (for
+example, declaring 500Mbps for a track encoded at 16Mbps). Because the
+bandwidth allocation algorithm ({{allocation-algorithm}}) only selects a
+track once `set.target` meets or exceeds its declared threshold, an
+inflated threshold ensures the track is effectively never selected for
+downstream delivery.
+
+Combined with the upstream forward=1 requirement described above, this
+allows a subscriber to cause a publisher to continuously fetch and cache a
+track's full upstream bitrate while never delivering any of it downstream.
+This is functionally equivalent to a subscriber issuing a SUBSCRIBE with
+Forward=0 for that track, and represents the same category of risk as the
+attack described above, disguised as switching set membership rather than an
+explicit non-forwarding subscription.
+
+Since MOQT already permits Forward=0 subscriptions as a normal feature, this
+document does not define new protocol-level defenses against a
+misrepresented Throughput Threshold. Publishers MAY apply the general-purpose
+resource protections described above, and MAY treat a declared Throughput
+Threshold that is grossly inconsistent with a track's observed or announced
+encoding bitrate as a signal for additional scrutiny of that subscriber.
 
 # IANA Considerations
 
@@ -297,8 +386,6 @@ Section 4.6}}).
 | Type | Name       | Specification |
 |-----:|:-----------|:--------------|
 | 0x0  | Default  | This document  |
-
-
 
 
 # Acknowledgments
