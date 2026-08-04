@@ -30,7 +30,7 @@
     Jinja2 3.1.6
     lxml 6.1.1
     natsort 8.4.0
-    platformdirs 4.10.1
+    platformdirs 4.11.0
     pycountry 24.6.1
     PyYAML 6.0.3
     requests 2.33.1
@@ -1050,11 +1050,11 @@ svg {
 <thead><tr>
 <td class="left">Internet-Draft</td>
 <td class="center">SSTS</td>
-<td class="right">July 2026</td>
+<td class="right">August 2026</td>
 </tr></thead>
 <tfoot><tr>
 <td class="left">Law, et al.</td>
-<td class="center">Expires 31 January 2027</td>
+<td class="center">Expires 5 February 2027</td>
 <td class="right">[Page]</td>
 </tr></tfoot>
 </table>
@@ -1067,12 +1067,12 @@ svg {
 <dd class="internet-draft">draft-wilaw-moq-moqt-ssts-latest</dd>
 <dt class="label-published">Published:</dt>
 <dd class="published">
-<time datetime="2026-07-30" class="published">30 July 2026</time>
+<time datetime="2026-08-04" class="published">4 August 2026</time>
     </dd>
 <dt class="label-intended-status">Intended Status:</dt>
 <dd class="intended-status">Standards Track</dd>
 <dt class="label-expires">Expires:</dt>
-<dd class="expires"><time datetime="2027-01-31">31 January 2027</time></dd>
+<dd class="expires"><time datetime="2027-02-05">5 February 2027</time></dd>
 <dt class="label-authors">Authors:</dt>
 <dd class="authors">
 <div class="author">
@@ -1147,7 +1147,7 @@ svg {
         time. It is inappropriate to use Internet-Drafts as reference
         material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
 <p id="section-boilerplate.1-4">
-        This Internet-Draft will expire on 31 January 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+        This Internet-Draft will expire on 5 February 2027.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
 </section>
 </div>
 <div id="copyright">
@@ -1217,6 +1217,14 @@ svg {
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
             <p id="section-toc.1-1.7.1"><a href="#section-7" class="auto internal xref">7</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#section-7.1" class="auto internal xref">7.1</a>.  <a href="#name-asymmetric-resource-exhaust" class="internal xref">Asymmetric Resource Exhaustion via Switching Set Fan-out</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#section-7.2" class="auto internal xref">7.2</a>.  <a href="#name-misrepresented-throughput-t" class="internal xref">Misrepresented Throughput Threshold</a></p>
+</li>
+            </ul>
 </li>
           <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
             <p id="section-toc.1-1.8.1"><a href="#section-8" class="auto internal xref">8</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
@@ -1254,7 +1262,7 @@ svg {
 a publisher dynamically selects which track to forward from a switching set based on
 various algorithms. Each algorithm defines a set of attributes which are passed in the
 SWITCHING_SET_ASSIGNMENT parameter <a href="#switching-set-assignment-param" class="auto internal xref">Section 5</a> along with a
-complimentary set of rules for subscriber behavior and relay behavior.<a href="#section-1-1" class="pilcrow">¶</a></p>
+complimentary set of rules for subscriber behavior and publisher behavior.<a href="#section-1-1" class="pilcrow">¶</a></p>
 <p id="section-1-2">This specification defines a default algorithm - type 0. Other algorithms are referenced in the
 "SSTS Algorithms" registry (<a href="#iana-ssts-algorithms" class="auto internal xref">Section 8.3</a>).<a href="#section-1-2" class="pilcrow">¶</a></p>
 <p id="section-1-3">SSTS is implemented as a MOQT Extension (See <span>[<a href="#MOQT" class="cite xref">MOQT</a>]</span> Sect 3.2).<a href="#section-1-3" class="pilcrow">¶</a></p>
@@ -1302,11 +1310,11 @@ registry (see <a href="#iana-ssts-algorithms" class="auto internal xref">Section
 <p id="section-4-1">The subscriber is responsible for grouping tracks into switching sets based on application-level
 knowledge. A switching set is a collection of tracks representing the same content encoded at
 different throughput levels, typically from a single source. Tracks within a switching set are
-time-aligned at certain group boundaries, allowing the relay to switch between tracks at these
-boundaries while ensuring the subscriber receives uninterrupted content from the set. The relay
+time-aligned at certain group boundaries, allowing the publisher to switch between tracks at these
+boundaries while ensuring the subscriber receives uninterrupted content from the set. The publisher
 selects exactly one track per switching set to forward at any given time.<a href="#section-4-1" class="pilcrow">¶</a></p>
 <p id="section-4-2">Subscribers can create switching sets through three methods. All support single or multiple
-switching sets and result in identical relay behavior:<a href="#section-4-2" class="pilcrow">¶</a></p>
+switching sets and result in identical publisher behavior:<a href="#section-4-2" class="pilcrow">¶</a></p>
 <ul class="normal">
 <li class="normal" id="section-4-3.1">
           <p id="section-4-3.1.1">Individual SUBSCRIBE: the subscriber sends a separate SUBSCRIBE message for each track,
@@ -1314,7 +1322,7 @@ and appends the SWITCHING_SET_ASSIGNMENT parameter to assign the track to a swit
 </li>
         <li class="normal" id="section-4-3.2">
           <p id="section-4-3.2.1">SUBSCRIBE_TRACKS: the subscriber sends a SUBSCRIBE_TRACKS message. For each matching
-track, the relay will issue a PUBLISH message. The subscriber assigns tracks to switching sets
+track, the publisher will issue a PUBLISH message. The subscriber assigns tracks to switching sets
 by appending the SWITCHING_SET_ASSIGNMENT parameter to the PUBLISH_OK message.<a href="#section-4-3.2.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-4-3.3">
@@ -1347,7 +1355,7 @@ SWITCHING_SET_ASSIGNMENT {
 <li class="normal" id="section-5-4.1">
           <p id="section-5-4.1.1">Switching set ID: Integer identifying the switching set. A track <span class="bcp14">MUST</span> only be assigned
 to one switching set at a time. If a subscription attempts to assign a track that is
-already assigned to a different switching set, the relay <span class="bcp14">MUST</span> reject the subscription
+already assigned to a different switching set, the publisher <span class="bcp14">MUST</span> reject the subscription
 with a Parameter Error.<a href="#section-5-4.1.1" class="pilcrow">¶</a></p>
 </li>
         <li class="normal" id="section-5-4.2">
@@ -1386,19 +1394,21 @@ SWITCHING_SET_ASSIGNMENT {
             <p id="section-6.1-3.1.1">Throughput threshold: Minimum throughput (kbps) required to select this track.<a href="#section-6.1-3.1.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.1-3.2">
-            <p id="section-6.1-3.2.1">Set throughput weight: Relative weight for bandwidth allocation, expressed as an
-integer 1 &lt;= N &lt;= 10. Each set receives bandwidth proportional to its weight:
-<code>target = B_total × weight / sum_F</code>. These are relative weights, not absolute
-percentages; for example, weights of 6, 4, 3 (sum = 13) allocate 46%, 31%, 23%
-respectively. This allows sets to be added or removed without requiring other sets to
-update their weights. When multiple subscriptions in the same switching set specify
-different weight values, the publisher <span class="bcp14">MUST</span> use the value from the most recently received
-message for that set.<a href="#section-6.1-3.2.1" class="pilcrow">¶</a></p>
+            <p id="section-6.1-3.2.1">Set throughput weight: Relative weight for bandwidth allocation among switching sets
+that share the same 'set.rank' value, expressed as an integer 1 &lt;= N &lt;= 10. Sets
+sharing a rank divide the bandwidth available to that rank tier proportionally to
+their weight — e.g. weights of 6, 4, 3 (sum = 13) among three same-rank sets allocate
+46%, 31%, 23% of that tier's available bandwidth, respectively. Weight has no effect
+across different rank values; a higher-priority set (lower 'set.rank') is served
+ahead of a lower-priority set regardless of relative weight. See
+<a href="#allocation-algorithm" class="auto internal xref">Section 6.3.1</a> for details. When multiple subscriptions in the same
+switching set specify different weight values, the publisher <span class="bcp14">MUST</span> use the value from
+the most recently received message for that set.<a href="#section-6.1-3.2.1" class="pilcrow">¶</a></p>
 </li>
           <li class="normal" id="section-6.1-3.3">
             <p id="section-6.1-3.3.1">Activate switching: Integer, when set to 0, pauses SSTS switching for this set. When set
-to N, the relay activates or resumes switching as soon as the number of tracks assigned to
-the switching set is &gt;= N.  Activation takes effect when an Object is received or published
+to N, the publisher activates or resumes switching as soon as the number of tracks assigned to
+the switching set is &gt;= N. Activation takes effect when an Object is received or published
 on a Group larger than previously largest Group. When multiple subscriptions in the same
 switching set specify different activate values, the publisher <span class="bcp14">MUST</span> use the value from the
 most recently received message for that set.<a href="#section-6.1-3.3.1" class="pilcrow">¶</a></p>
@@ -1418,7 +1428,7 @@ message for that set.<a href="#section-6.1-3.4.1" class="pilcrow">¶</a></p>
         <h3 id="name-subscriber-behavior">
 <a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-subscriber-behavior" class="section-name selfRef">Subscriber behavior</a>
         </h3>
-<p id="section-6.2-1">The subscriber follows the general rules {#ssts-general-requirements} for switching set establishment.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
+<p id="section-6.2-1">The subscriber follows the general rules <a href="#ssts-general-requirements" class="auto internal xref">Section 4</a> for switching set establishment.<a href="#section-6.2-1" class="pilcrow">¶</a></p>
 <p id="section-6.2-2">The subscriber sets activate switching = N, where N is the number of tracks that will be assigned to that
 switching set.<a href="#section-6.2-2" class="pilcrow">¶</a></p>
 <p id="section-6.2-3">To modify an established switching set, the subscriber can<a href="#section-6.2-3" class="pilcrow">¶</a></p>
@@ -1470,7 +1480,7 @@ when an Object is received or published on a Group larger than previously larges
 <p id="section-6.3-3">If the publisher receives a PUBLISH_DONE message, or an UNSUBSCRIBE for a subscription that was
 previously added to a switching set, then it <span class="bcp14">MUST</span> remove that subscription from the switching set
 and continue to process the switching across the remaining subscriptions within that set. The value of
-'activate switching' <span class="bcp14">MUST</span> be decremented by one to enable the switching to remain active.<a href="#section-6.3-3" class="pilcrow">¶</a></p>
+'activate switching' <span class="bcp14">MUST</span> be decremented by one, while maintaining a floor of zero.<a href="#section-6.3-3" class="pilcrow">¶</a></p>
 <p id="section-6.3-4">If all tracks are removed from a previously established switching set, then that set is
 considered deleted and is removed from the bandwidth allocation algorithm.<a href="#section-6.3-4" class="pilcrow">¶</a></p>
 <p id="section-6.3-5">Publishers <span class="bcp14">SHOULD</span> maintain a forward=1 upstream state (if any) on all tracks within a switching set,
@@ -1480,47 +1490,71 @@ irrespective of their downstream forwarding state.<a href="#section-6.3-5" class
           <h4 id="name-bandwidth-allocation">
 <a href="#section-6.3.1" class="section-number selfRef">6.3.1. </a><a href="#name-bandwidth-allocation" class="section-name selfRef">Bandwidth Allocation</a>
           </h4>
-<p id="section-6.3.1-1">The publisher maintains:<a href="#section-6.3.1-1" class="pilcrow">¶</a></p>
-<ul class="normal">
-<li class="normal" id="section-6.3.1-2.1">
-              <p id="section-6.3.1-2.1.1"><code>B_total</code>: Estimated downstream bandwidth capacity for the subscriber connection. The
-publisher maintains a bandwidth estimate for each downstream subscriber. The timebase of this
-estimate <span class="bcp14">SHOULD</span> be at least the Group duration of the track, if that is known or can be estimated
-by the publisher, or several seconds if it is unknown. The estimate is obtained
-periodically from the transport stack (e.g., congestion window pacing rate, smoothed RTT)
-and <span class="bcp14">MAY</span> be supplemented by external sources or application-level feedback. The exact mechanism
-is not defined by this algorithm and might vary between implementations.<a href="#section-6.3.1-2.1.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-6.3.1-2.2">
-              <p id="section-6.3.1-2.2.1"><code>sum_W</code>: Sum of all set weights updated incrementally as subscriptions are added or removed<a href="#section-6.3.1-2.2.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-6.3.1-2.3">
-              <p id="section-6.3.1-2.3.1">'set.weight': for each switching set, the switching set weight, as defined by the set
-throughput weight of the SWITCHING_SET_ASSIGNMENT <a href="#switching-set-assignment-param" class="auto internal xref">Section 5</a> parameter.<a href="#section-6.3.1-2.3.1" class="pilcrow">¶</a></p>
-</li>
-            <li class="normal" id="section-6.3.1-2.4">
-              <p id="section-6.3.1-2.4.1">'set.rank': for each switching set, the switching set rank, as defined by the set
-rank field of the SWITCHING_SET_ASSIGNMENT <a href="#switching-set-assignment-param" class="auto internal xref">Section 5</a> parameter.<a href="#section-6.3.1-2.4.1" class="pilcrow">¶</a></p>
-</li>
-          </ul>
+<p id="section-6.3.1-1">The publisher maintains:
+- 'B_total': Estimated downstream bandwidth capacity for the subscriber connection in kbps. The
+  publisher maintains a bandwidth estimate for each downstream subscriber. The timebase of this
+  estimate <span class="bcp14">SHOULD</span> be at least the Group duration of the track, if that is known or can be estimated
+  by the publisher, or several seconds if it is unknown. The estimate is obtained
+  periodically from the transport stack (e.g., congestion window pacing rate, smoothed RTT)
+  and <span class="bcp14">MAY</span> be supplemented by external sources or application-level feedback. The exact mechanism
+  is not defined by this algorithm and might vary between implementations.
+- 'set.weight': for each switching set, the switching set weight, as defined by the set
+  throughput weight of the SWITCHING_SET_ASSIGNMENT <a href="#switching-set-assignment-param" class="auto internal xref">Section 5</a> parameter.
+- 'set.rank': for each switching set, the switching set rank, as defined by the set
+  rank field of the SWITCHING_SET_ASSIGNMENT <a href="#switching-set-assignment-param" class="auto internal xref">Section 5</a> parameter.<a href="#section-6.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-6.3.1-2">Switching sets are allocated bandwidth using strict priority: 'set.rank' establishes a total
+order across switching sets, and a switching set <span class="bcp14">MUST</span> receive its full computed allocation
+before any switching set of lower priority (a higher 'set.rank' value) receives any bandwidth.
+'set.weight' only arbitrates between switching sets that share the same 'set.rank' value; it
+has no effect across different rank values.<a href="#section-6.3.1-2" class="pilcrow">¶</a></p>
 <p id="section-6.3.1-3">On a periodic update interval or at a minimum when an object is received/published on a group
-larger than previously largest group, the relay executes the following algorithm:<a href="#section-6.3.1-3" class="pilcrow">¶</a></p>
+larger than previously largest group, the publisher executes the following algorithm:<a href="#section-6.3.1-3" class="pilcrow">¶</a></p>
 <div class="alignLeft art-text artwork" id="section-6.3.1-4">
 <pre>
-B_remaining  = B_total
-for each set in ascending set.rank order:
-  set.target = B_remaining × set.weight / sum_W
-  set.allocated = min(set.target, B_remaining)
-  set.selected = track in set with highest throughput_threshold where track.throughput_threshold &lt;= set.allocated
-  B_remaining -= set.selected.throughput_threshold
+B_remaining = B_total
+for each distinct set.rank value r present among active switching sets, in ascending order:
+  active = { switching sets with set.rank == r }
+  tier_pool = B_remaining
+  repeat:
+    sum_W_active = sum of set.weight for set in active
+    for each set in active:
+      set.target = tier_pool × set.weight / sum_W_active
+      set.selected = null
+      if ( set.target &gt;= lowest track.throughput_threshold in set )
+          set.selected = track in set with highest throughput_threshold
+                         where track.throughput_threshold &lt;= set.target
+    saturated = { set in active : set.selected == highest-throughput_threshold
+                                   track available in set }
+    for each set in saturated:
+      tier_pool -= (set.selected != null) ? set.selected.throughput_threshold : 0
+      remove set from active
+  until ( active is empty OR saturated is empty )
+  for each set with set.rank == r:
+    B_remaining -= (set.selected != null) ? set.selected.throughput_threshold : 0
 for each track in a switching set:
   set forward state = (track == set.selected)
 </pre><a href="#section-6.3.1-4" class="pilcrow">¶</a>
 </div>
-<p id="section-6.3.1-5">The rank ordering ensures higher-priority sets receive their target allocation first; lower-priority sets
-absorb any bandwidth shortfall. When bandwidth is sufficient, all sets receive <code>allocated = target</code>.
-When bandwidth is constrained, higher-priority sets (lower rank value) are protected while
-lower-priority sets receive less than their target or nothing.<a href="#section-6.3.1-5" class="pilcrow">¶</a></p>
+<p id="section-6.3.1-5">A switching set that is the only one at its rank receives up to the entirety of
+'B_remaining' as its target, since 'sum_W_active' reduces to its own weight — this is what
+allows a higher-priority set to consume as much of 'B_total' as it needs, independent of
+weight. A switching set that shares a rank with others initially divides that tier's
+opening bandwidth proportionally by weight.<a href="#section-6.3.1-5" class="pilcrow">¶</a></p>
+<p id="section-6.3.1-6">If a switching set in a tier cannot use its full proportional share — either because it
+has already selected the highest-bitrate track available to it, or because no track in
+the set can make use of the additional bandwidth — the unused portion of its share is
+reallocated among the remaining switching sets in the same tier, recomputed proportionally
+to their weights, and this repeats until every switching set in the tier has either
+selected its highest-available track or the tier's bandwidth is fully claimed. Only
+bandwidth that no switching set in the tier can use at all carries forward, via
+'B_remaining', to the next, lower-priority tier.<a href="#section-6.3.1-6" class="pilcrow">¶</a></p>
+<p id="section-6.3.1-7">Each redistribution round removes at least one switching set from further consideration
+within its tier, or terminates outright; the process therefore converges within at most
+as many rounds as there are switching sets sharing that rank. Since a switching set
+typically contains a small number of tracks, this adds negligible computational cost
+compared to a single-pass allocation.<a href="#section-6.3.1-7" class="pilcrow">¶</a></p>
+<p id="section-6.3.1-8">If the allocated throughput for a set is lower than the lowest throughput threshold of any
+track in that set, then no data from that set is forwarded.<a href="#section-6.3.1-8" class="pilcrow">¶</a></p>
 </section>
 </div>
 </section>
@@ -1532,7 +1566,66 @@ lower-priority sets receive less than their target or nothing.<a href="#section-
       <h2 id="name-security-considerations">
 <a href="#section-7" class="section-number selfRef">7. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
       </h2>
-<p id="section-7-1">TBD<a href="#section-7-1" class="pilcrow">¶</a></p>
+<p id="section-7-1">This document relies on the session security properties of <span>[<a href="#MOQT" class="cite xref">MOQT</a>]</span> and does
+not modify MOQT's authentication or authorization model. The risks discussed
+below concern resource exhaustion enabled by an already-authorized subscriber,
+not confidentiality or integrity.<a href="#section-7-1" class="pilcrow">¶</a></p>
+<div id="asymmetric-resource-exhaustion-via-switching-set-fan-out">
+<section id="section-7.1">
+        <h3 id="name-asymmetric-resource-exhaust">
+<a href="#section-7.1" class="section-number selfRef">7.1. </a><a href="#name-asymmetric-resource-exhaust" class="section-name selfRef">Asymmetric Resource Exhaustion via Switching Set Fan-out</a>
+        </h3>
+<p id="section-7.1-1">A subscriber can assign a large number of high-bitrate tracks to a single
+switching set while consuming little or no downstream bandwidth. Because
+publishers <span class="bcp14">SHOULD</span> maintain a forward=1 upstream state on all tracks within a
+switching set irrespective of their downstream forwarding state (see
+<a href="#ssts-general-requirements" class="auto internal xref">Section 4</a>), a publisher can be induced to fetch and cache
+a large volume of upstream content while forwarding little or nothing to the
+subscriber.<a href="#section-7.1-1" class="pilcrow">¶</a></p>
+<p id="section-7.1-2">This is functionally equivalent to a subscriber issuing individual SUBSCRIBE
+messages with Forward=0 for a large number of tracks, and is therefore a
+pre-existing risk in MOQT rather than one introduced by this extension.
+Switching sets do make the pattern easier to trigger, since a single
+SWITCHING_SET_ASSIGNMENT parameter can fan out to many tracks that a
+publisher must actively fetch upstream. As with the general MOQT case, this
+<span class="bcp14">SHOULD</span> be mitigated by general-purpose protections at the publisher and any
+intermediate nodes performing the switching, such as per-subscriber limits on
+the number and aggregate bitrate of concurrently subscribed tracks, quotas on
+upstream fetch and cache resources, and monitoring for subscribers whose
+upstream resource consumption is disproportionate to their delivered
+downstream rate. This document does not define new protocol mechanisms for
+this purpose.<a href="#section-7.1-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="misrepresented-throughput-threshold">
+<section id="section-7.2">
+        <h3 id="name-misrepresented-throughput-t">
+<a href="#section-7.2" class="section-number selfRef">7.2. </a><a href="#name-misrepresented-throughput-t" class="section-name selfRef">Misrepresented Throughput Threshold</a>
+        </h3>
+<p id="section-7.2-1">The Throughput Threshold field of the SWITCHING_SET_ASSIGNMENT parameter
+(<a href="#switching-set-assignment-param" class="auto internal xref">Section 5</a>) is supplied by the subscriber and is not
+independently verified by the publisher. A subscriber can declare a
+Throughput Threshold far in excess of a track's actual encoded bitrate (for
+example, declaring 500Mbps for a track encoded at 16Mbps). Because the
+bandwidth allocation algorithm (<a href="#allocation-algorithm" class="auto internal xref">Section 6.3.1</a>) only selects a
+track once <code>set.target</code> meets or exceeds its declared threshold, an
+inflated threshold ensures the track is effectively never selected for
+downstream delivery.<a href="#section-7.2-1" class="pilcrow">¶</a></p>
+<p id="section-7.2-2">Combined with the upstream forward=1 requirement described above, this
+allows a subscriber to cause a publisher to continuously fetch and cache a
+track's full upstream bitrate while never delivering any of it downstream.
+This is functionally equivalent to a subscriber issuing a SUBSCRIBE with
+Forward=0 for that track, and represents the same category of risk as the
+attack described above, disguised as switching set membership rather than an
+explicit non-forwarding subscription.<a href="#section-7.2-2" class="pilcrow">¶</a></p>
+<p id="section-7.2-3">Since MOQT already permits Forward=0 subscriptions as a normal feature, this
+document does not define new protocol-level defenses against a
+misrepresented Throughput Threshold. Publishers <span class="bcp14">MAY</span> apply the general-purpose
+resource protections described above, and <span class="bcp14">MAY</span> treat a declared Throughput
+Threshold that is grossly inconsistent with a track's observed or announced
+encoding bitrate as a signal for additional scrutiny of that subscriber.<a href="#section-7.2-3" class="pilcrow">¶</a></p>
+</section>
+</div>
 </section>
 </div>
 <div id="iana-considerations">
