@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-10-15T03:48:49.835121+00:00",
+  "timestamp": "2026-10-22T03:51:40.264979+00:00",
   "repo": "wilaw/moqt-ssts",
   "labels": [
     {
@@ -63,6 +63,22 @@
       "body": "- Where are we in the group , beginning or end\n- Switch up and Down",
       "createdAt": "2026-10-14T19:56:42Z",
       "updatedAt": "2026-10-14T19:56:42Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 7,
+      "id": "I_kwDOToLYrc8AAAABYsBRGg",
+      "title": "Compare multi-subscription design to a single synthetic track",
+      "url": "https://github.com/wilaw/moqt-ssts/issues/7",
+      "state": "OPEN",
+      "author": "afrind",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "The SSTS design requires the subscriber to manage one subscription per quality.  The publisher (likely) needs to send PUB_STATE_NOTIFY control traffic as subscriptions turn on and off.\n\nContrast this with a design where the client subscribes to a single track with a unique name (e.g. `live-sports-game-abr-<unique id>--video`), probably with the source tracks / switching set as parameters.\n\nThe same algorithm runs on the publisher - selecting the best source track based on available bandwidth and switching at group boundaries.\n\nI suppose one tradeoff might be that the multi-track design allows e.g. a low and high bitrate to both publish the same group: it started serving quality-A but after some time changed it's mind and wants -B instead before the group boundary.",
+      "createdAt": "2026-10-21T00:02:12Z",
+      "updatedAt": "2026-10-21T00:02:12Z",
       "closedAt": null,
       "comments": []
     }
