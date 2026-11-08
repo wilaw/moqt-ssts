@@ -1,6 +1,6 @@
 {
   "magic": "E!vIA5L86J2I",
-  "timestamp": "2026-10-22T03:51:40.264979+00:00",
+  "timestamp": "2026-11-08T05:09:15.066969+00:00",
   "repo": "wilaw/moqt-ssts",
   "labels": [
     {
@@ -79,6 +79,22 @@
       "body": "The SSTS design requires the subscriber to manage one subscription per quality.  The publisher (likely) needs to send PUB_STATE_NOTIFY control traffic as subscriptions turn on and off.\n\nContrast this with a design where the client subscribes to a single track with a unique name (e.g. `live-sports-game-abr-<unique id>--video`), probably with the source tracks / switching set as parameters.\n\nThe same algorithm runs on the publisher - selecting the best source track based on available bandwidth and switching at group boundaries.\n\nI suppose one tradeoff might be that the multi-track design allows e.g. a low and high bitrate to both publish the same group: it started serving quality-A but after some time changed it's mind and wants -B instead before the group boundary.",
       "createdAt": "2026-10-21T00:02:12Z",
       "updatedAt": "2026-10-21T00:02:12Z",
+      "closedAt": null,
+      "comments": []
+    },
+    {
+      "number": 8,
+      "id": "I_kwDOToLYrc8AAAABcx_61Q",
+      "title": "Define the source-id track property, and let it carry the alignment promise",
+      "url": "https://github.com/wilaw/moqt-ssts/issues/8",
+      "state": "OPEN",
+      "author": "riedlse",
+      "authorAssociation": "NONE",
+      "assignees": [],
+      "labels": [],
+      "body": "At Seattle you took the action to write up the source-id track property that links Top-N output to SSTS. Here is a proposal for its definition, because the same property can also answer the question the SWITCH_FROM PR leaves open: \"Group Aligned mode is effective when the activating and suspending Tracks use aligned Group IDs\", with aligned undefined, and Group Aligned is now the only mode staying in core.\n\nProposed definition. SOURCE_ID is a Track Property, set by the publisher, immutable for the life of the track, and opaque to relays: they forward it and never act on it. Tracks that share a SOURCE_ID value within a namespace make the promise that section 4 of this draft already assumes: (1) they carry the same source content; (2) they are group-aligned: a Group ID names the same span of media time on every track in the set, so group boundaries coincide, including any short group a publisher inserts at a splice; (3) each Group is decodable from its first Object without reference to earlier Groups. It says nothing about bitrate ordering, codec, or which rendition is which; that stays in the catalog.\n\nWho consumes it. SSTS: a subscriber can populate a switching set from the tracks that share a SOURCE_ID instead of from application knowledge, and a publisher-assigned set (the PUBLISH_OK path) should only group tracks that share one. Top-N: the per-user selection output carries the SOURCE_ID, so SSTS can switch within it; that is the two-dimensional grid from the Thursday discussion, and neither algorithm changes. SWITCH_FROM: a subscriber that sees the same SOURCE_ID on the activating and suspending tracks knows Group Aligned applies; otherwise it should expect a gap or an overlap. The SWITCH_FROM text can then define \"aligned Group IDs\" as (2) plus (3) and point here, and the relay learns nothing, which was the room's condition.\n\nRelationship to the MSF catalog. altGroup says that equal-numbered groups overlap, which is weaker than (2). A catalog can carry the same id so a player can read it before it subscribes; I would raise that tightening with the MSF editors separately.\n\nWhy I care. Our live channels splice cohort ad tracks into content tracks at group boundaries: 0.5 s groups, with a short group at each splice because real ads run 29.8 to 30.2 s. The alignment holds by construction, but today nothing in MOQT or MSF lets the publisher say so to the player.\n",
+      "createdAt": "2026-11-05T15:40:41Z",
+      "updatedAt": "2026-11-05T15:40:41Z",
       "closedAt": null,
       "comments": []
     }
